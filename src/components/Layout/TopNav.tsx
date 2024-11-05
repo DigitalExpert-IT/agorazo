@@ -1,15 +1,42 @@
-import React, { useState } from "react";
 import Link from "next/link";
+import Bell from "feather-icons-react";
 import Menu from "feather-icons-react";
-import LuSearch from "feather-icons-react"
+import React, { useEffect, useState } from "react";
+import Truck from "feather-icons-react";
+import { BiWallet } from "react-icons/bi";
+import LuSearch from "feather-icons-react";
+import SimpleBarReact from "simplebar-react";
+import DollarSign from "feather-icons-react";
+import ShoppingCart from "feather-icons-react";
+import { MdOutlineSettings } from "react-icons/md";
+import { AiOutlineLogout, AiOutlineUser } from "react-icons/ai";
 
 interface TopNavProps {
-  toggleStat: boolean;
+  toggleStat?: boolean;
 }
 
 export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
+  const [userData, setUserData] = useState(false);
   const [toggle, setToggle] = useState(toggleStat);
+  const [notification, setNotification] = useState(false);
 
+  useEffect(() => {
+    let handlar = () => {
+      setNotification(false);
+    };
+    let user = () => {
+      setUserData(false);
+    };
+    document.addEventListener("mousedown", handlar);
+    document.addEventListener("mousedown", user);
+  }, []);
+
+  const notificationtoggle = () => {
+    setNotification(!notification);
+  };
+  const userHandler = () => {
+    setUserData(!userData);
+  };
   const toggleHandler = () => {
     setToggle(!toggle);
   };
@@ -43,12 +70,15 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
             className="btn btn-icon btn-sm rounded-full inline-flex bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white"
           >
             <div onClick={() => toggleHandler()}>
-              <Menu className="size-4" icon="menu"} />
+              <Menu className="size-4" icon="menu" />
             </div>
           </Link>
           <div className="ps-1.5">
             <div className="form-icon relative sm:block hidden">
-              <LuSearch className="absolute top-1/2 -translate-y-1/2 start-3" icon="search" />
+              <LuSearch
+                className="absolute top-1/2 -translate-y-1/2 start-3"
+                icon="search"
+              />
               <input
                 type="text"
                 className="form-input w-56 ps-9 py-2 px-3 h-8 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded-md outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 bg-white"
@@ -68,7 +98,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
               type="button"
               onClick={notificationtoggle}
             >
-              <Bell className="size-4" />
+              <Bell className="size-4" icon={""} />
               <span className="absolute top-0 end-0 flex items-center justify-center bg-emerald-600 text-white text-[10px] font-bold rounded-full size-2 after:content-[''] after:absolute after:h-2 after:w-2 after:bg-emerald-600 after:top-0 after:end-0 after:rounded-full after:animate-ping"></span>
             </button>
             <div
@@ -88,7 +118,10 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     <Link href="#" className="block font-medium py-1.5 px-4">
                       <div className="flex">
                         <div className="size-10 rounded-full shadow shadow-violet-600/10 dark:shadow-gray-700 bg-violet-600/10 dark:bg-slate-800 text-violet-600 dark:text-white flex items-center justify-center">
-                          <ShoppingCart className="size-4" />
+                          <ShoppingCart
+                            className="size-4"
+                            icon="shopping-cart"
+                          />
                         </div>
                         <div className="ms-2">
                           <span className="text-[15px] font-semibold block">
@@ -103,7 +136,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     <Link href="#" className="block font-medium py-1.5 px-4">
                       <div className="flex">
                         <img
-                          src={ClientOne}
+                          src="/assets/images/client/01.jpg"
                           className="size-10 rounded-full shadow dark:shadow-gray-700"
                           alt=""
                         />
@@ -120,7 +153,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     <Link href="#" className="block font-medium py-1.5 px-4">
                       <div className="flex">
                         <div className="size-10 rounded-full shadow shadow-violet-600/10 dark:shadow-gray-700 bg-violet-600/10 dark:bg-slate-800 text-violet-600 dark:text-white flex items-center justify-center">
-                          <DollarSign className="size-4" />
+                          <DollarSign className="size-4" icon="dollar-sign" />
                         </div>
                         <div className="ms-2">
                           <span className="text-[15px] font-semibold block">
@@ -135,7 +168,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     <Link href="#" className="block font-medium py-1.5 px-4">
                       <div className="flex">
                         <div className="size-10 rounded-full shadow shadow-violet-600/10 dark:shadow-gray-700 bg-violet-600/10 dark:bg-slate-800 text-violet-600 dark:text-white flex items-center justify-center">
-                          <Truck className="size-4" />
+                          <Truck className="size-4" icon="truck" />
                         </div>
                         <div className="ms-2">
                           <span className="text-[15px] font-semibold block">
@@ -150,7 +183,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     <Link href="#" className="block font-medium py-1.5 px-4">
                       <div className="flex">
                         <img
-                          src={ClientTwo}
+                          src="/assets/images/client/02.jpg"
                           className="size-10 rounded-full shadow dark:shadow-gray-700"
                           alt=""
                         />
@@ -171,7 +204,6 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
           <li className="inline-block mb-0">
             <Link
               href="#"
-              onClick={metamask}
               id="connectWallet"
               className="btn btn-icon btn-sm rounded-full inline-flex bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white"
             >
@@ -188,7 +220,11 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                 className="btn btn-icon btn-sm rounded-full inline-flex bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white"
                 onClick={userHandler}
               >
-                <img src={ClientTwo} className="rounded-full" alt="" />
+                <img
+                  src="/assets/images/client/02.jpg"
+                  className="rounded-full"
+                  alt=""
+                />
               </span>
             </button>
             <div
@@ -201,7 +237,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                 <div className="absolute px-4 -bottom-7 start-0">
                   <div className="flex items-end">
                     <img
-                      src={ClientTwo}
+                      src="/assets/images/client/02.jpg"
                       className="rounded-full size-10 shadow dark:shadow-gray-700"
                       alt=""
                     />
