@@ -1,16 +1,12 @@
 import Link from "next/link";
 import { useState } from "react";
-import File from "feather-icons-react";
-import Image from "feather-icons-react";
-import Users from "feather-icons-react";
-import LogIn from "feather-icons-react";
-import Layers from "feather-icons-react";
-import Airplay from "feather-icons-react";
 import SimpleBarReact from "simplebar-react";
+import { FileImage, Airplay, Layers, LogIn, Users, File } from "lucide-react";
 
 export const Navbar = () => {
-  const [manu, setManu] = useState("");
+  const [manu] = useState("");
   const [subManu, setSubManu] = useState("");
+
   return (
     <nav id="sidebar" className="sidebar-wrapper">
       <div className="sidebar-content">
@@ -38,7 +34,7 @@ export const Navbar = () => {
           >
             <li className={["", "index"].includes(manu) ? "active" : ""}>
               <Link href="/index">
-                <Airplay className="size-4 me-3" icon="airplay" />
+                <Airplay className="size-4 me-3" />
                 Dashboard
               </Link>
             </li>
@@ -52,11 +48,11 @@ export const Navbar = () => {
             >
               <Link
                 href="#"
-                onClick={e => {
+                onClick={() => {
                   setSubManu(subManu === "explore-item" ? "" : "explore-item");
                 }}
               >
-                <Image className="size-4 me-3" icon="image" />
+                <FileImage className="size-4 me-3" />
                 Explore Items
               </Link>
               <div
@@ -96,11 +92,11 @@ export const Navbar = () => {
             >
               <Link
                 href="#"
-                onClick={e => {
+                onClick={() => {
                   setSubManu(subManu === "creator-item" ? "" : "creator-item");
                 }}
               >
-                <Users className="size-4 me-3" icon={""} />
+                <Users className="size-4 me-3" />
                 Creators
               </Link>
               <div
@@ -143,11 +139,11 @@ export const Navbar = () => {
             >
               <Link
                 href="#"
-                onClick={e => {
+                onClick={() => {
                   setSubManu(subManu === "page-item" ? "" : "page-item");
                 }}
               >
-                <File className="size-4 me-3" icon={""} />
+                <File className="size-4 me-3" />
                 Pages
               </Link>
               <div
@@ -188,11 +184,11 @@ export const Navbar = () => {
             >
               <Link
                 href="#"
-                onClick={e => {
+                onClick={() => {
                   setSubManu(subManu === "auth-item" ? "" : "auth-item");
                 }}
               >
-                <LogIn className="size-4 me-3" icon={""} />
+                <LogIn className="size-4 me-3" />
                 Authentication
               </Link>
               <div
@@ -237,11 +233,11 @@ export const Navbar = () => {
             >
               <Link
                 href="#"
-                onClick={e => {
+                onClick={() => {
                   setSubManu(subManu === "error-item" ? "" : "error-item");
                 }}
               >
-                <Layers className="size-4 me-3" icon={""} />
+                <Layers className="size-4 me-3" />
                 Miscellaneous
               </Link>
               <div
@@ -272,29 +268,6 @@ export const Navbar = () => {
                   </li>
                 </ul>
               </div>
-            </li>
-
-            <li className="relative lg:mx-8 lg:mt-8 mx-6 mt-6 p-6 rounded-lg bg-gradient-to-b to-transparent from-gray-50 dark:from-slate-800 text-center">
-              <span className="relative z-10">
-                <img
-                  src="/assets/images/creator.png"
-                  className="w-32 mx-auto"
-                  alt=""
-                />
-                <span className="text-lg font-semibold h5">Subscribe Now</span>
-
-                <span className="text-slate-400 mt-3 mb-5 block">
-                  Get one month free and subscribe to pro
-                </span>
-
-                <Link
-                  href="https://1.envato.market/giglink-react"
-                  target="_blank"
-                  className="btn inline-block text-center bg-gray-100/5 hover:bg-gray-100 border-gray-100 dark:border-gray-100/5 hover:border-gray-100 text-slate-900 dark:text-white dark:hover:text-slate-900 rounded-md"
-                >
-                  Subscribe
-                </Link>
-              </span>
             </li>
           </ul>
         </SimpleBarReact>

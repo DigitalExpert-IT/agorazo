@@ -2,14 +2,17 @@ import Link from "next/link";
 import Bell from "feather-icons-react";
 import Menu from "feather-icons-react";
 import React, { useEffect, useState } from "react";
-import Truck from "feather-icons-react";
-import { BiWallet } from "react-icons/bi";
-import LuSearch from "feather-icons-react";
 import SimpleBarReact from "simplebar-react";
-import DollarSign from "feather-icons-react";
-import ShoppingCart from "feather-icons-react";
-import { MdOutlineSettings } from "react-icons/md";
-import { AiOutlineLogout, AiOutlineUser } from "react-icons/ai";
+import {
+  Wallet,
+  Search,
+  DollarSign,
+  ShoppingCart,
+  Settings,
+  Truck,
+  LogOut,
+  User,
+} from "lucide-react";
 
 interface TopNavProps {
   toggleStat?: boolean;
@@ -21,10 +24,11 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
   const [notification, setNotification] = useState(false);
 
   useEffect(() => {
-    let handlar = () => {
+    const handlar = () => {
       setNotification(false);
     };
-    let user = () => {
+
+    const user = () => {
       setUserData(false);
     };
     document.addEventListener("mousedown", handlar);
@@ -75,10 +79,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
           </Link>
           <div className="ps-1.5">
             <div className="form-icon relative sm:block hidden">
-              <LuSearch
-                className="absolute top-1/2 -translate-y-1/2 start-3"
-                icon="search"
-              />
+              <Search className="absolute top-1/2 -translate-y-1/2 start-3" />
               <input
                 type="text"
                 className="form-input w-56 ps-9 py-2 px-3 h-8 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded-md outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 bg-white"
@@ -118,10 +119,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     <Link href="#" className="block font-medium py-1.5 px-4">
                       <div className="flex">
                         <div className="size-10 rounded-full shadow shadow-violet-600/10 dark:shadow-gray-700 bg-violet-600/10 dark:bg-slate-800 text-violet-600 dark:text-white flex items-center justify-center">
-                          <ShoppingCart
-                            className="size-4"
-                            icon="shopping-cart"
-                          />
+                          <ShoppingCart className="size-4" />
                         </div>
                         <div className="ms-2">
                           <span className="text-[15px] font-semibold block">
@@ -153,7 +151,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     <Link href="#" className="block font-medium py-1.5 px-4">
                       <div className="flex">
                         <div className="size-10 rounded-full shadow shadow-violet-600/10 dark:shadow-gray-700 bg-violet-600/10 dark:bg-slate-800 text-violet-600 dark:text-white flex items-center justify-center">
-                          <DollarSign className="size-4" icon="dollar-sign" />
+                          <DollarSign className="size-4" />
                         </div>
                         <div className="ms-2">
                           <span className="text-[15px] font-semibold block">
@@ -168,7 +166,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     <Link href="#" className="block font-medium py-1.5 px-4">
                       <div className="flex">
                         <div className="size-10 rounded-full shadow shadow-violet-600/10 dark:shadow-gray-700 bg-violet-600/10 dark:bg-slate-800 text-violet-600 dark:text-white flex items-center justify-center">
-                          <Truck className="size-4" icon="truck" />
+                          <Truck className="size-4" />
                         </div>
                         <div className="ms-2">
                           <span className="text-[15px] font-semibold block">
@@ -207,7 +205,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
               id="connectWallet"
               className="btn btn-icon btn-sm rounded-full inline-flex bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white"
             >
-              <BiWallet />
+              <Wallet />
             </Link>
           </li>
           <li className="dropdown inline-block relative">
@@ -256,7 +254,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     qhut0...hfteh45
                   </span>
                   <Link href="#" className="text-violet-600">
-                    <BiWallet />
+                    <Wallet />
                   </Link>
                 </div>
               </div>
@@ -276,8 +274,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     href="/creator-profile"
                     className="flex items-center text-[14px] font-semibold py-1.5 px-4 hover:text-violet-600"
                   >
-                    <AiOutlineUser className="text-[16px] align-middle me-1" />{" "}
-                    Profile
+                    <User className="text-[16px] align-middle me-1" /> Profile
                   </Link>
                 </li>
                 <li>
@@ -285,7 +282,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     href="/creator-profile-setting"
                     className="flex items-center text-[14px] font-semibold py-1.5 px-4 hover:text-violet-600"
                   >
-                    <MdOutlineSettings className="text-[16px] align-middle me-1" />{" "}
+                    <Settings className="text-[16px] align-middle me-1" />{" "}
                     Settings
                   </Link>
                 </li>
@@ -295,8 +292,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                     href="/login"
                     className="flex items-center text-[14px] font-semibold py-1.5 px-4 hover:text-violet-600"
                   >
-                    <AiOutlineLogout className="text-[16px] align-middle me-1" />{" "}
-                    Logout
+                    <LogOut className="text-[16px] align-middle me-1" /> Logout
                   </Link>
                 </li>
               </ul>
