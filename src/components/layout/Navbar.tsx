@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useState } from "react";
-import SimpleBarReact from "simplebar-react";
 import { Airplay } from "lucide-react";
+import SimpleBarReact from "simplebar-react";
 
 export const Navbar = () => {
   const [manu] = useState("");
