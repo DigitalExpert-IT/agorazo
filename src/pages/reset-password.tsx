@@ -1,7 +1,18 @@
 import React from "react";
 import Link from "next/link";
 import { AuthLayout } from "components/layout/AuthLayout";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+interface IResetPassword {
+    email: string;
+
+}
+
 export default function ResetPassword() {
+    const {register, handleSubmit} = useForm<IResetPassword>();
+
+    const onSubmit: SubmitHandler<IResetPassword> = (data) => console.log(data)
+
   return (
     <AuthLayout>
       <div className="container relative z-1">
@@ -25,16 +36,22 @@ export default function ResetPassword() {
                 Please enter your email address. You will receive a link to
                 create a new password via email.
               </p>
-              <form className="text-start">
+              <form className="text-start" onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-1">
                   <div className="mb-4">
                     <label className="font-semibold" htmlFor="LoginEmail">
                       Email Address:
                     </label>
                     <input
+                        {...register("email", {
+                            required: "Email is Required",
+                            pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message: "Invalid email address"
+                        }})}
                       id="LoginEmail"
                       type="email"
-                      className="form-input w-full text-[15px] py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded-full outline-none border border-gray-200 focus:border-violet-600 dark:border-gray-800 dark:focus:border-violet-600 focus:ring-0 mt-3"
+                      className="form-input text-black w-full text-[15px] py-2 px-3 h-10 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded-full outline-none border border-gray-200 focus:border-violet-600 dark:border-gray-800 dark:focus:border-violet-600 focus:ring-0 mt-3"
                       placeholder="name@example.com"
                     />
                   </div>
@@ -44,13 +61,11 @@ export default function ResetPassword() {
                       type="submit"
                       className="btn bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white rounded-full w-full"
                       value="Send"
+
                     />
                   </div>
 
                   <div className="text-center">
-                    <span className="text-slate-400 me-2">
-                      Remember your password ?{" "}
-                    </span>
                     <Link
                       href="/login"
                       className="text-black dark:text-white font-bold"

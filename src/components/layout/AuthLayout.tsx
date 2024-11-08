@@ -7,7 +7,7 @@ interface IAuthWrapper {
 
 export const AuthLayout = ({ children }: IAuthWrapper) => {
   return (
-    <>
+    <div>
       <section className="md:h-screen py-36 flex items-center bg-[url('/assets/images/cta.jpg')] bg-no-repeat bg-center">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black"></div>
         {children}
@@ -19,7 +19,7 @@ export const AuthLayout = ({ children }: IAuthWrapper) => {
         >
           <Icon icon="arrow-left" className="size-4" />
         </Link>
+        </div>
       </div>
-    </>
   );
 };
