@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Navbar, Footer, TopNav } from "components/Layout";
+import {Navbar, TopNav, Footer} from "components/layout"
 import { Switcher } from "components/Switcher";
 
 interface LayoutMainProps {
   children: React.ReactNode;
 }
 
-const LayoutMain: React.FC<LayoutMainProps> = ({ children }) => {
+export const LayoutMain: React.FC<LayoutMainProps> = ({ children }) => {
   const [toggle] = useState(true);
 
   return (
@@ -23,5 +23,3 @@ const LayoutMain: React.FC<LayoutMainProps> = ({ children }) => {
     </>
   );
 };
-
-export default LayoutMain;

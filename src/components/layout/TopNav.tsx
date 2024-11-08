@@ -1,46 +1,29 @@
 import Link from "next/link";
 import Bell from "feather-icons-react";
 import Menu from "feather-icons-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SimpleBarReact from "simplebar-react";
 import {
-  Wallet,
   Search,
   DollarSign,
   ShoppingCart,
-  Settings,
   Truck,
-  LogOut,
-  User,
 } from "lucide-react";
+import { UseProfile } from "hooks/useProfile";
+import {ProfileNavbar} from "components/layout"
 
 interface TopNavProps {
   toggleStat?: boolean;
 }
 
 export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
-  const [userData, setUserData] = useState(false);
   const [toggle, setToggle] = useState(toggleStat);
-  const [notification, setNotification] = useState(false);
-
-  useEffect(() => {
-    const handlar = () => {
-      setNotification(false);
-    };
-
-    const user = () => {
-      setUserData(false);
-    };
-    document.addEventListener("mousedown", handlar);
-    document.addEventListener("mousedown", user);
-  }, []);
+  const {notification, setNotification, userHandler, userData, authenticated} = UseProfile();
 
   const notificationtoggle = () => {
     setNotification(!notification);
   };
-  const userHandler = () => {
-    setUserData(!userData);
-  };
+  
   const toggleHandler = () => {
     setToggle(!toggle);
   };
@@ -199,15 +182,6 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
               </SimpleBarReact>
             </div>
           </li>
-          <li className="inline-block mb-0">
-            <Link
-              href="#"
-              id="connectWallet"
-              className="btn btn-icon btn-sm rounded-full inline-flex bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white"
-            >
-              <Wallet />
-            </Link>
-          </li>
           <li className="dropdown inline-block relative">
             <button
               data-dropdown-toggle="dropdown"
@@ -225,78 +199,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
                 />
               </span>
             </button>
-            <div
-              className={`dropdown-menu absolute end-0 m-0 mt-4 z-10 w-48 rounded-md overflow-hidden bg-white dark:bg-slate-900 shadow dark:shadow-gray-800 ${
-                userData ? "block" : "hidden"
-              }`}
-            >
-              <div className="relative">
-                <div className="py-8 bg-gradient-to-tr from-violet-600 to-red-600"></div>
-                <div className="absolute px-4 -bottom-7 start-0">
-                  <div className="flex items-end">
-                    <img
-                      src="/assets/images/client/02.jpg"
-                      className="rounded-full size-10 shadow dark:shadow-gray-700"
-                      alt=""
-                    />
-
-                    <span className="font-semibold text-[15px] ms-1">
-                      Jenny Jimenez
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-10 px-4">
-                <h5 className="font-semibold text-[15px]">Wallet:</h5>
-                <div className="flex items-center justify-between">
-                  <span className="text-[13px] text-slate-400">
-                    qhut0...hfteh45
-                  </span>
-                  <Link href="#" className="text-violet-600">
-                    <Wallet />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="mt-4 px-4">
-                <h5 className="text-[15px]">
-                  Balance:{" "}
-                  <span className="text-violet-600 font-semibold">
-                    0.00045ETH
-                  </span>
-                </h5>
-              </div>
-
-              <ul className="py-2 text-start">
-                <li>
-                  <Link
-                    href="/creator-profile"
-                    className="flex items-center text-[14px] font-semibold py-1.5 px-4 hover:text-violet-600"
-                  >
-                    <User className="text-[16px] align-middle me-1" /> Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/creator-profile-setting"
-                    className="flex items-center text-[14px] font-semibold py-1.5 px-4 hover:text-violet-600"
-                  >
-                    <Settings className="text-[16px] align-middle me-1" />{" "}
-                    Settings
-                  </Link>
-                </li>
-                <li className="border-t border-gray-100 dark:border-gray-800 my-2"></li>
-                <li>
-                  <Link
-                    href="/login"
-                    className="flex items-center text-[14px] font-semibold py-1.5 px-4 hover:text-violet-600"
-                  >
-                    <LogOut className="text-[16px] align-middle me-1" /> Logout
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <ProfileNavbar userData={userData} authenticated={authenticated}/>
           </li>
         </ul>
       </div>
