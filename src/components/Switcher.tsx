@@ -6,7 +6,7 @@ export const Switcher = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  function changeMode(mode: string, _event: unknown) {
+  function changeMode(mode: string) {
     switch (mode) {
       case "mode":
         if (document.documentElement.className.includes("dark")) {
@@ -27,7 +27,7 @@ export const Switcher = () => {
           type="checkbox"
           className="checkbox opacity-0 absolute"
           id="chk"
-          onClick={event => changeMode("mode", event)}
+          onClick={() => changeMode("mode")}
         />
         <label
           className="label bg-slate-900 dark:bg-white shadow dark:shadow-gray-800 cursor-pointer rounded-full flex justify-between items-center p-1 w-14 h-8"
