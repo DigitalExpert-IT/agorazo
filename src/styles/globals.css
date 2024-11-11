@@ -2263,7 +2263,7 @@ h6,
   color: rgb(255 255 255 / 0.5);
 }
 .page-wrapper .sidebar-wrapper .sidebar-menu .sidebar-dropdown > a:after {
-  content: "󰍟" !important;
+  content: ">" !important;
   font-family: "Material Design Icons";
 }
 .page-wrapper

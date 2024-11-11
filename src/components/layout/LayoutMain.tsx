@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Navbar, TopNav, Footer} from "components/layout"
+import { Navbar, Footer, TopNav } from "./";
 import { Switcher } from "components/Switcher";
 
 interface LayoutMainProps {
