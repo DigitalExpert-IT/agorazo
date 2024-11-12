@@ -13,6 +13,8 @@
     "@prisma/client": "5.22.0",
     "@types/jsonwebtoken": "^9.0.7",
     "bcryptjs": "^2.4.3",
+    "ccxt": "^4.4.29",
+    "coinpayments": "^2.2.0",
     "feather-icons-react": "^0.7.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.454.0",
