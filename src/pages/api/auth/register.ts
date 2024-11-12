@@ -1,4 +1,4 @@
-import { prisma } from "api/prisma";
+import { prisma } from "pages/api/prisma";
 import bcrypt from "bcryptjs";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -17,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       data: {
         email,
         password: hashedPassword,
+        role: "user"
       },
     });
 

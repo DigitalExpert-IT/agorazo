@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { prisma } from "api/prisma";
+import { prisma } from "pages/api/prisma";
 
 const JWT_SECRET = process.env.AUTH_SECRET || "";
 
@@ -31,7 +31,7 @@ export default NextAuth({
 
         // JWT token generate
         const token = jwt.sign(
-          { userId: user.id, email: user.email },
+          { userId: user.id, email: user.email, role: user.role },
           JWT_SECRET,
           { expiresIn: '12h' }
         );
@@ -39,6 +39,7 @@ export default NextAuth({
         return {
           id: user.id,
           email: user.email,
+          role: user.role,
           token,
         };
       },
@@ -63,7 +64,7 @@ export default NextAuth({
     },
   },
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/auth/login",
   },
   session: {
     strategy: "jwt",
