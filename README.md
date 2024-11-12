@@ -2,7 +2,13 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### Setup Backend Environment:
+```
+npx auth secret //To create AUTH_SECRET at .env.local 
+pnpm exec prisma migrate dev //To create local database on your project and generate the types
+```
+
+Run the development server:
 
 ```bash
 npm run dev
