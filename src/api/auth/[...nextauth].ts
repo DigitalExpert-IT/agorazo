@@ -19,13 +19,11 @@ export default NextAuth({
 
         if (!email || !password) throw new Error("Please input the email and password");
 
-        // Find the user by email
         const user = await prisma.user.findFirst({ where: email! });
         if (!user) {
           throw new Error("User not found");
         }
 
-        // Compare password with the hashed password in the database
         const isPasswordValid = await bcrypt.compare(password as string, user.password!);
         if (!isPasswordValid) {
           throw new Error("Invalid password");
