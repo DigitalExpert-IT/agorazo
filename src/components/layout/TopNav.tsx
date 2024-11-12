@@ -4,7 +4,7 @@ import Bell from "feather-icons-react";
 import Menu from "feather-icons-react";
 import React, { useState } from "react";
 import SimpleBarReact from "simplebar-react";
-import { Search, DollarSign, ShoppingCart, Truck } from "lucide-react";
+import { DollarSign, ShoppingCart, Truck } from "lucide-react";
 import { UseProfile } from "hooks/useProfile";
 import { ProfileNavbar } from "components/layout";
 
@@ -62,18 +62,6 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
               <Menu className="size-4" icon="menu" />
             </div>
           </Link>
-          <div className="ps-1.5">
-            <div className="form-icon relative sm:block hidden">
-              <Search className="absolute top-1/2 -translate-y-1/2 start-3 text-black dark:text-white" />
-              <input
-                type="text"
-                className="form-input w-56 ps-9 py-2 px-3 h-8 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded-md outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 bg-white text-black"
-                name="s"
-                id="searchItem"
-                placeholder="Search..."
-              />
-            </div>
-          </div>
         </div>
 
         <ul className="list-none mb-0 space-x-1">

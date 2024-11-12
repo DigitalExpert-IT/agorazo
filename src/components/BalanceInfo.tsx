@@ -57,7 +57,7 @@ export const BalanceInfo = () => {
 
         {/* Purchase Box */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 md:col-span-2">
-          <h2 className="text-xl font-semibold mb-4">Make a Purchase</h2>
+          <h2 className="text-xl font-semibold mb-4 dark:text-white">Make a Purchase</h2>
           <div className="space-y-4">
             <input
               type="number"
