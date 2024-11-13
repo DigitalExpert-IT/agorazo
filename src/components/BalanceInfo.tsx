@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { ArrowUpCircle, ArrowDownCircle, Currency } from "lucide-react";
+import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 
 export const BalanceInfo = () => {
   const [amount, setAmount] = useState("");
