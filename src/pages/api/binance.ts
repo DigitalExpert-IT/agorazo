@@ -1,42 +1,44 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// pages/api/markets.js
+import { NextApiRequest, NextApiResponse } from "next";
 
-import ccxt from 'ccxt';
-import { NextApiRequest, NextApiResponse } from 'next';
+interface MarketData {
+  prices: Array<[number, number]>;
+  total_volumes: Array<[number, number]>;
+}
 
-// type ResponseData = {
-//   info: {
-//     symbol: string;
-//     highPrice?: number;
-//     lowPrice?: number;
-//     weightedAvgPrice: number;
-//     priceChangePercent: number;
-//     volume: number;
-//     lastPrice: number;
-//   };
-// }
+interface ErrorResponse {
+  error: string;
+}
 
-// type ResponseError = {
-//   error: string;
-// }
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse<any>
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<MarketData | ErrorResponse>
 ) {
-//   const { pair } = req.query;
+  if (req.method !== "GET") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
   try {
-    // const tokocrypto = new ccxt.coinbase();
-    // // tokocrypto.proxyUrl = "http://103.178.42.102:8181/";
-    // const markets = await tokocrypto.fetchTicker(pair?.toString() ?? "DOGE/USDT");
-    const markets = await fetch("https://www.coingecko.com/price_charts/50597/usd/24_hours.json")
-    res.status(200).json( await markets.json());
-  } catch (e: any) {
-    if (e instanceof ccxt.NetworkError) {
-      res.status(500).json({ error: `fetchTicker failed due to a network error: ${e.message}` });
-    } else if (e instanceof ccxt.ExchangeError) {
-      res.status(500).json({ error: `fetchTicker failed due to exchange error: ${e.message}` });
-    } else {
-      res.status(500).json({ error: `fetchTicker failed with: ${e.message}` });
+    const response = await fetch(
+      "https://www.coingecko.com/price_charts/50597/usd/24_hours.json",
+      {
+        headers: {
+          Accept: "application/json",
+          "User-Agent": "Mozilla/5.0",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    const data = await response.json();
+    return res.status(200).json(data);
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    return res.status(500).json({
+      error: `Failed to fetch market data: ${errorMessage}`,
+    });
   }
 }
