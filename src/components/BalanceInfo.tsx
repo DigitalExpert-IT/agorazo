@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import React, { useState, useEffect } from "react";
+import { ArrowUpCircle, ArrowDownCircle, Currency } from "lucide-react";
 
 export const BalanceInfo = () => {
   const [amount, setAmount] = useState("");
   const [tokenPrice, setTokenPrice] = useState<number | null>(null);
+  const [prevPrice, setPrevPrice] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,7 +20,9 @@ export const BalanceInfo = () => {
 
         if (data.stats && data.stats.length > 0) {
           const currentPrice = data.stats[data.stats.length - 1][1];
+          const perviousePrice = data.stats[data.stats.length - 2][1];
           setTokenPrice(currentPrice);
+          setPrevPrice(perviousePrice);
         }
       } catch (err) {
         setError(
@@ -52,6 +56,9 @@ export const BalanceInfo = () => {
     }
   };
 
+  const priceChange =
+    tokenPrice !== null && prevPrice !== null ? tokenPrice - prevPrice : null;
+
   const formatPrice = (price: number | null) => {
     if (price === null) return "$-.--";
     return new Intl.NumberFormat("en-US", {
@@ -79,9 +86,23 @@ export const BalanceInfo = () => {
               <p className="text-red-500">{error}</p>
             ) : (
               <>
-                <p className="text-3xl font-bold text-black dark:text-white">
-                  {formatPrice(tokenPrice)}
-                </p>
+                <div className="flex items-center justify-between">
+                  <p
+                    className={`text-3xl font-bold ${
+                      priceChange! >= 0 ? "text-green-500" : "text-red-500"
+                    } `}
+                  >
+                    {formatPrice(tokenPrice)}
+                  </p>
+                  {priceChange !== null ? (
+                    priceChange >= 0 ? (
+                      <ArrowUpCircle className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <ArrowDownCircle className="w-5 h-5 text-red-500" />
+                    )
+                  ) : null}
+                </div>
+
                 <p className="text-gray-600 dark:text-gray-400">
                   ZENQ Token Price
                 </p>
