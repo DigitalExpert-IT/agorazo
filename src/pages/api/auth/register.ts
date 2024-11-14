@@ -4,9 +4,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
-    const { email, password } = req.body;
+    const { email, name, password } = req.body;
 
-    const existingUser = await prisma.user.findUnique({ where: email });
+    const existingUser = await prisma.user.findUnique({ where: {email} });
     if (existingUser) {
       return res.status(400).json({ error: "Email already exists" });
     }
@@ -15,6 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await prisma.user.create({
       data: {
+        name,
         email,
         password: hashedPassword,
         role: "user"

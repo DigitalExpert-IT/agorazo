@@ -1,8 +1,8 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from 'next-auth/react'
+import { NextApiResponse } from 'next'
+import { getSession, GetSessionParams } from 'next-auth/react'
 
 export default async function handler(
-  req: NextApiRequest,
+  req: NextApiResponse & GetSessionParams,
   res: NextApiResponse
 ) {
   const session = await getSession(req);
@@ -16,7 +16,7 @@ export default async function handler(
   }
 
   // Check if the user has the 'admin' role
-  if (session.user.role !== 'admin') {
+  if (session.user?.role !== 'admin') {
     res.status(401).json({
       error: 'Unauthorized access: User does not have admin privileges.',
     })
