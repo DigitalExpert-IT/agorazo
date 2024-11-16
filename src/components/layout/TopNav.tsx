@@ -4,13 +4,19 @@ import Menu from "feather-icons-react";
 import React, { useState } from "react";
 import { UseProfile } from "hooks/useProfile";
 import { ProfileNavbar } from "components/layout";
+import { Session } from "next-auth";
+import { IAuth } from "types/next-auth";
+import { User } from "lucide-react";
 
 interface TopNavProps {
   toggleStat?: boolean;
+  auth: Session
+  logOut: () => void
 }
 
-export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
+export const TopNav: React.FC<TopNavProps> = ({ toggleStat, auth, logOut }) => {
   const [toggle, setToggle] = useState(toggleStat);
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const {
     userHandler,
     userData,
@@ -64,16 +70,20 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat }) => {
             >
               <span
                 className="btn btn-icon btn-sm rounded-full inline-flex bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white"
-                onClick={userHandler}
+                onClick={() => setIsOpen(!isOpen)}
               >
+              {auth ?
                 <img
                   src="/assets/images/client/02.jpg"
                   className="rounded-full"
                   alt=""
                 />
+                :
+                <User className="text-[16px] align-middle me-1 ml-1" />
+              }
               </span>
             </button>
-            <ProfileNavbar userData={userData} authenticated={authenticated} />
+              <ProfileNavbar logOut={() => logOut()} onOpen={isOpen} user={auth?.user} token={auth?.token}  expires={auth?.expires} />
           </li>
         </ul>
       </div>

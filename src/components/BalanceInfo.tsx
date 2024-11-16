@@ -1,9 +1,11 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export const BalanceInfo = () => {
   const [amount, setAmount] = useState("");
+  const {data: session} = useSession();
   const [tokenPrice, setTokenPrice] = useState<number | null>(null);
   const [prevPrice, setPrevPrice] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -170,7 +172,7 @@ export const BalanceInfo = () => {
             </div>
             <button
               onClick={handleBuy}
-              disabled={!amount || isLoading || !!error}
+              disabled={!amount || isLoading || !!error || session !== null}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Loading..." : "Buy ZENQ"}
