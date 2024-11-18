@@ -50,20 +50,20 @@ export default async function handler(
 
   try {
     const transaction = await client.createTransaction({
-      currency1: "USDT",
-      currency2: "USDT",
+      currency1: "USDT.ERC20",
+      currency2: "USDT.ERC20",
       amount: amount,
       address: OWNER_USDT_ADDRESS,
       buyer_email: "tuxpower27@gmail.com",
     });
 
     // Validate transaction response
-    if (!transaction?.qrcode_url) {
+    if (!transaction?.status_url) {
       throw new Error("Invalid transaction response");
     }
 
     return res.status(200).json({
-      qrCode: transaction.qrcode_url,
+      qrCode: transaction.status_url,
     });
   } catch (error) {
     console.error("CoinPayments transaction error:", error);

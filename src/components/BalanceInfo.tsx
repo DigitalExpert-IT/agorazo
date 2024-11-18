@@ -42,14 +42,15 @@ export const BalanceInfo = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleBuy = async () => {
+  const handleBuy = async (amount: number) => {
     if (!amount || !tokenPrice) return;
 
     try {
+      console.log(amount)
       const response = await fetch("/api/coinpayment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 10 }),
+        body: JSON.stringify({ amount }),
       });
       const data = await response.json();
       console.log(data);
@@ -160,7 +161,7 @@ export const BalanceInfo = () => {
             </div>
             <div className="flex space-x-5">
               <button
-                onClick={handleBuy}
+                onClick={() => handleBuy(Number(amount))}
                 disabled={!amount || isLoading || !!error || session !== null}
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
               >
