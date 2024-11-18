@@ -20,7 +20,9 @@ export default function ResetPassword() {
     };
 
     useEffect(() => {
-      setShowToast(true)
+      if(success || error){
+        setShowToast(true)
+      }
     }, [success, error])
 
   return (

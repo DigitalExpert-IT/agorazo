@@ -5,6 +5,7 @@ import { sendVerificationEmail } from 'utils/email';
 
 const prisma = new PrismaClient();
 
+const REQUEST_LIMIT_TIME = 5 * 60 * 1000; // 5 minutes
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
@@ -21,8 +22,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(404).json({ message: 'User not found' });
       }
 
+      const recentResetRequest = await prisma.passwordReset.findFirst({
+        where: {
+          userId: user.id,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      if (recentResetRequest && new Date().getTime() - new Date(recentResetRequest.createdAt).getTime() < REQUEST_LIMIT_TIME) {
+        return res.status(429).json({ message: 'Please wait before requesting another reset email' });
+      }
+
       const resetToken = crypto.randomBytes(32).toString('hex');
-      const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000); 
 
       await prisma.passwordReset.create({
         data: {
