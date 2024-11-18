@@ -52,6 +52,11 @@ export const BalanceInfo = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount }),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Transaction failed');
+      }
       const data = await response.json();
       console.log(data);
       // console.log(`Buying ZENQ tokens for ${amount} USDT`);
