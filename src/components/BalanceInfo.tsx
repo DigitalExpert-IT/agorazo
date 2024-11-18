@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 export const BalanceInfo = () => {
   const [amount, setAmount] = useState("");
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   const [tokenPrice, setTokenPrice] = useState<number | null>(null);
   const [prevPrice, setPrevPrice] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,13 +46,20 @@ export const BalanceInfo = () => {
     if (!amount || !tokenPrice) return;
 
     try {
-      console.log(`Buying ZENQ tokens for ${amount} USDT`);
-      const tokensToReceive = Number(amount) / tokenPrice;
-      console.log(
-        `You will receive approximately ${tokensToReceive.toFixed(
-          6
-        )} ZENQ tokens`
-      );
+      const response = await fetch("/api/coinpayment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: 10 }),
+      });
+      const data = await response.json();
+      console.log(data);
+      // console.log(`Buying ZENQ tokens for ${amount} USDT`);
+      // const tokensToReceive = Number(amount) / tokenPrice;
+      // console.log(
+      //   `You will receive approximately ${tokensToReceive.toFixed(
+      //     6
+      //   )} ZENQ tokens`
+      // );
     } catch (err) {
       console.error("Error during purchase:", err);
     }
@@ -129,25 +136,6 @@ export const BalanceInfo = () => {
             </div>
             <p className="text-gray-600 dark:text-gray-400">ZENQ Balance</p>
           </div>
-
-          <div className="mt-4">
-            <div className="flex items-center">
-              <div className="relative w-10 h-10 mr-2">
-                <Image
-                  src="/usdt.svg"
-                  alt="USDT token"
-                  fill
-                  sizes="40px"
-                  className="object-contain"
-                  priority
-                />
-              </div>
-              <p className="text-3xl font-bold text-black dark:text-white">
-                {formatPrice(1234.56)}
-              </p>
-            </div>
-            <p className="text-gray-600 dark:text-gray-400">USDT Balance</p>
-          </div>
         </div>
 
         {/* Purchase Box */}
@@ -171,20 +159,13 @@ export const BalanceInfo = () => {
               )}
             </div>
             <div className="flex space-x-5">
-            <button
-              onClick={handleBuy}
-              disabled={!amount || isLoading || !!error || session !== null}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? "Loading..." : "Buy ZENQ"}
-            </button>
-            <button
-              onClick={handleBuy}
-              disabled={!amount || isLoading || !!error || session !== null}
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? "Loading..." : "Withdraw"}
-            </button>
+              <button
+                onClick={handleBuy}
+                disabled={!amount || isLoading || !!error || session !== null}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? "Loading..." : "Buy ZENQ"}
+              </button>
             </div>
           </div>
         </div>
