@@ -170,6 +170,7 @@ export const BalanceInfo = () => {
                 </div>
               )}
             </div>
+            <div className="flex space-x-5">
             <button
               onClick={handleBuy}
               disabled={!amount || isLoading || !!error || session !== null}
@@ -177,6 +178,14 @@ export const BalanceInfo = () => {
             >
               {isLoading ? "Loading..." : "Buy ZENQ"}
             </button>
+            <button
+              onClick={handleBuy}
+              disabled={!amount || isLoading || !!error || session !== null}
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? "Loading..." : "Withdraw"}
+            </button>
+            </div>
           </div>
         </div>
       </div>
