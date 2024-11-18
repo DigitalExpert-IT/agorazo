@@ -15,10 +15,11 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const { email, password } = credentials;
+        if (!credentials || !credentials.email || !credentials.password) {
+          throw new Error("Please input the email and password");
+        }
 
-        if (!email || !password) throw new Error("Please input the email and password");
-        
+        const { email, password } = credentials;
 
         const user = await prisma.user.findFirst({ where: {email} });
         if (!user) {

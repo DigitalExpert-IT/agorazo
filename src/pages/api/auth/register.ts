@@ -29,7 +29,7 @@ export default async function handler(
         },
       });
 
-      await sendVerificationEmail(email, verifyToken);
+      await sendVerificationEmail(email, verifyToken, true);
 
       res.status(201).json({
         message:

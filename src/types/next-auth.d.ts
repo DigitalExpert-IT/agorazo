@@ -1,5 +1,4 @@
 import 'next-auth';
-import { DefaultSession } from 'next-auth';
 
 interface IAuth {
   expires: string;

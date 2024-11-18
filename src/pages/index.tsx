@@ -1,7 +1,8 @@
 import { BalanceInfo, Table } from "components";
 import { LayoutMain } from "components/layout";
+import { withAuth } from "hoc";
 
-export default function Home() {
+const Home = () => {
   
   return (
     <LayoutMain>
@@ -10,3 +11,5 @@ export default function Home() {
     </LayoutMain>
   );
 }
+
+export default withAuth(Home);

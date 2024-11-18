@@ -2,10 +2,8 @@
 import Link from "next/link";
 import Menu from "feather-icons-react";
 import React, { useState } from "react";
-import { UseProfile } from "hooks/useProfile";
 import { ProfileNavbar } from "components/layout";
 import { Session } from "next-auth";
-import { IAuth } from "types/next-auth";
 import { User } from "lucide-react";
 
 interface TopNavProps {
@@ -17,11 +15,6 @@ interface TopNavProps {
 export const TopNav: React.FC<TopNavProps> = ({ toggleStat, auth, logOut }) => {
   const [toggle, setToggle] = useState(toggleStat);
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const {
-    userHandler,
-    userData,
-    authenticated,
-  } = UseProfile();
 
   const toggleHandler = () => {
     setToggle(!toggle);

@@ -27,6 +27,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Wallet    Wallet[]
+
+  passwordResets PasswordReset[] @relation("UserToPasswordReset")
 }
 
 model PendingUser {
@@ -78,6 +80,18 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PasswordReset {
+  id         String   @id @default(uuid())
+  userId     String
+  resetToken String   @unique(map: "Unique_ResetToken")
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  user User @relation("UserToPasswordReset", fields: [userId], references: [id])
+
+  @@index([resetToken], map: "Index_ResetToken")
 }
 
 // Optional for WebAuthn support

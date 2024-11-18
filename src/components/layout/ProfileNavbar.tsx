@@ -13,7 +13,7 @@ interface ProfileNavbarProps {
   logOut: () => void;
 }
 
-export const ProfileNavbar: React.FC<ProfileNavbarProps> = ({ user, token, onOpen, expires, logOut }) => {
+export const ProfileNavbar: React.FC<ProfileNavbarProps> = ({ user, onOpen, logOut }) => {
   const isAuthenticated = !!(user && user.email);
 
   return (
