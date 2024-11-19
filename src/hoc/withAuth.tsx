@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LayoutIllustration } from "components/layout";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 export const withAuth = (WrappedComponent: () => JSX.Element | null) => {
@@ -15,17 +15,21 @@ export const withAuth = (WrappedComponent: () => JSX.Element | null) => {
 };
 
 const RegistrationRequired = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      router.push("/login");
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [router]);
+
   return (
     <LayoutIllustration
       illustrationUri="/assets/images/registration-required.svg"
-      title={"Registration Required"}
-      description={"You need to be registered to access this page"}
-    >
-      <Link href="/signup">
-        <button className="mt-3 bg-[#9321dd] text-white hover:bg-[#61089c] rounded-xl font-medium text-md py-2 px-4">
-          Register
-        </button>
-      </Link>
-    </LayoutIllustration>
+      title={"Login Required"}
+      description={"You need to be login to access this page"}
+    />
   );
 };
