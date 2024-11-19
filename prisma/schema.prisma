@@ -21,12 +21,12 @@ model User {
   role          String?
   accounts      Account[]
   sessions      Session[]
+  Transaction   Transaction[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Wallet    Wallet[]
 
   passwordResets PasswordReset[] @relation("UserToPasswordReset")
 }
@@ -110,10 +110,11 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
-model Wallet {
-  id      String @id @default(cuid())
-  userId  String
-  balance BigInt
+model Transaction {
+  id     String @id @default(cuid())
+  userId String
+  value  Int
+  type   String
 
   user User @relation(fields: [userId], references: [id])
 }

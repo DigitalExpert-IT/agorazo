@@ -21,7 +21,7 @@ export default NextAuth({
 
         const { email, password } = credentials;
 
-        const user = await prisma.user.findFirst({ where: {email} });
+        const user = await prisma.user.findFirst({ where: { email } });
         if (!user) {
           throw new Error("User not found");
         }
@@ -40,6 +40,7 @@ export default NextAuth({
 
         return {
           id: user.id,
+          userId: user.id,
           email: user.email,
           role: user.role,
           token,
@@ -53,6 +54,7 @@ export default NextAuth({
       if (user) {
         //@ts-expect-error "the type of User at jwt not included token"
         token.jwt = user.token;
+        token.email = user.email;
       }
       return token;
     },
@@ -61,6 +63,10 @@ export default NextAuth({
       if (token?.jwt) {
         //@ts-expect-error "the type of User at jwt not included token"
         session.token = token.jwt;
+        //@ts-expect-error "the type of User at jwt not included email"
+        session.user.email = token.email;
+        //@ts-expect-error "the type of User at jwt not included email"
+        session.user.id = token.userId;
       }
       return session;
     },
