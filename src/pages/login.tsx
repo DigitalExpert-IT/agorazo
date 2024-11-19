@@ -1,20 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AuthLayout } from "../components/layout/AuthLayout";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Icon from "feather-icons-react"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/router";
+import { Toast } from "components/ui";
 
 export interface ILogin {
   email: string;
   password: string;
-  remember: boolean;
+  remember?: boolean;
 }
 
 export default function Login() {
+  const router = useRouter()
   const [hide, setHide] = useState<boolean>(true)
+  const [showToast, setShowToast] = useState<boolean>(false)
+  const [status, setStatus] = useState<number>()
   const { register, handleSubmit } = useForm<ILogin>();
 
-  const onSubmit: SubmitHandler<ILogin> = (data) => console.log(data)
+  const handleLogin: SubmitHandler<ILogin> = async data => {
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password
+    })
+
+    setStatus(res?.status)
+  };
+
+  useEffect(() => {
+    if (status === 200) {
+      setShowToast(true)
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    } else if (status as number >= 400) {
+      setShowToast(true);
+    }
+  }, [status, router])
 
   return (
     <AuthLayout>
@@ -34,7 +59,7 @@ export default function Login() {
               />
             </Link>
             <h5 className="my-6 text-xl font-semibold">Login</h5>
-            <form className="text-start" onSubmit={handleSubmit(onSubmit)}>
+            <form className="text-start" onSubmit={handleSubmit(handleLogin)}>
               <div className="grid grid-cols-1">
                 <div className="mb-4">
                   <label className="font-semibold" htmlFor="LoginEmail">Email Address:</label>
@@ -98,6 +123,17 @@ export default function Login() {
           </div>
         </div>
       </div>
+      {showToast && (
+        <Toast
+          status={status === 200 ? "success" : "error"}
+          message={
+            status === 200
+              ? "Login Successful!"
+              : "Login Error Please Check Your Credential"
+          }
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </AuthLayout>
   );
 }

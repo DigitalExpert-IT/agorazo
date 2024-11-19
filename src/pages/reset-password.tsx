@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AuthLayout } from "components/layout/AuthLayout";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useResetPassword } from "hooks";
+import { Toast } from "components/ui";
 
 interface IResetPassword {
     email: string;
@@ -9,9 +11,19 @@ interface IResetPassword {
 }
 
 export default function ResetPassword() {
-    const {register, handleSubmit} = useForm<IResetPassword>();
+    const {register, handleSubmit, formState: { errors },} = useForm<IResetPassword>();
+    const [showToast, setShowToast] = useState<boolean>(false)
+    const { isLoading, error, success, sendResetEmail } = useResetPassword();
 
-    const onSubmit: SubmitHandler<IResetPassword> = (data) => console.log(data)
+    const handleReset: SubmitHandler<IResetPassword>  = async data => {
+      await sendResetEmail(data.email);
+    };
+
+    useEffect(() => {
+      if(success || error){
+        setShowToast(true)
+      }
+    }, [success, error])
 
   return (
     <AuthLayout>
@@ -36,7 +48,7 @@ export default function ResetPassword() {
                 Please enter your email address. You will receive a link to
                 create a new password via email.
               </p>
-              <form className="text-start" onSubmit={handleSubmit(onSubmit)}>
+              <form className="text-start" onSubmit={handleSubmit(handleReset)}>
                 <div className="grid grid-cols-1">
                   <div className="mb-4">
                     <label className="font-semibold" htmlFor="LoginEmail">
@@ -55,14 +67,20 @@ export default function ResetPassword() {
                       placeholder="name@example.com"
                     />
                   </div>
+                  {errors.email && (
+                      <span className="text-red-500 text-sm">
+                      {errors.email.message}
+                      </span>
+                  )}
 
                   <div className="mb-4">
                     <input
                       type="submit"
                       className="btn bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white rounded-full w-full"
-                      value="Send"
-
+                      value={isLoading ? "Sending..." : "Send Reset Email"}
+                      disabled={isLoading}
                     />
+                      
                   </div>
 
                   <div className="text-center">
@@ -79,6 +97,17 @@ export default function ResetPassword() {
           </div>
         </div>
       </div>
+      {showToast && (
+        <Toast
+          status={error ? "error" : "success"}
+          message={
+            error
+              ? error || "An error occurred during registration."
+              : "Reset Password Successful!"
+          }
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </AuthLayout>
   );
 }

@@ -7,7 +7,7 @@ interface IResponse {
 
 export const UseRegister = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [response, setResponse] = useState<IResponse>() // Default to null
+  const [response, setResponse] = useState<IResponse>()
   const [showToast, setShowToast] = useState<boolean>(false)
 
   const registerUser = async (name: string, email: string, password: string) => {
