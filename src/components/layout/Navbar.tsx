@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Airplay } from "lucide-react";
 import SimpleBarReact from "simplebar-react";
+import Image from "next/image";
 
 export const Navbar = () => {
   const [manu] = useState("");
@@ -11,13 +12,13 @@ export const Navbar = () => {
       <div className="sidebar-content">
         <div className="sidebar-brand">
           <Link href="/index">
-            <img
+            <Image
               src="/assets/images/logo-dark.png"
               height="24"
               className="block dark:hidden"
               alt=""
             />
-            <img
+            <Image
               src="/assets/images/logo-light.png"
               height="24"
               className="hidden dark:block"

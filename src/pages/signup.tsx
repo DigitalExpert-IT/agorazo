@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { UseRegister } from "hooks";
 import { Toast } from "components/ui";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 interface IRegister {
   name: string;
@@ -45,12 +46,12 @@ export default function Signup() {
         <div className="flex justify-center">
           <div className="max-w-[400px] w-full m-auto p-6 bg-white dark:bg-slate-900 shadow-md dark:shadow-gray-800 rounded-md">
             <Link href="/">
-              <img
+              <Image
                 src={"/assets/images/logo-dark.png"}
                 className="mx-auto h-7 block dark:hidden"
                 alt=""
               />
-              <img
+              <Image
                 src={"/assets/images/logo-light.png"}
                 className="mx-auto h-7 dark:block hidden"
                 alt=""
