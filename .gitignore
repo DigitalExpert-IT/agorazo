@@ -41,4 +41,5 @@ yarn-error.log*
 next-env.d.ts
 
 #local database
-agorazo.db
+/prisma/agorazo.db
+/prisma/migrations/
