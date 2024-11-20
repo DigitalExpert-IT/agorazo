@@ -19,7 +19,7 @@ export const sendVerificationEmail = async (
       ? `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://ik.imagekit.io/msxxxaegj/coinpayment/logo-dummy.png?updatedAt=1731895642836" alt="Company Logo" style="width: 100px; height: auto;">
+          <img src="https://ik.imagekit.io/msxxxaegj/coinpayment/logo-dark.png?updatedAt=1732088702629" alt="Company Logo" style="width: 100px; height: auto;">
         </div>
         <h1 style="color: #333;">Verify your email address</h1>
         <p>Click the link below to verify your email address:</p>
@@ -36,7 +36,7 @@ export const sendVerificationEmail = async (
       : `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="https://ik.imagekit.io/msxxxaegj/coinpayment/logo-dummy.png?updatedAt=1731895642836" alt="Company Logo" style="width: 100px; height: auto;">
+          <img src="https://ik.imagekit.io/msxxxaegj/coinpayment/logo-dark.png?updatedAt=1732088702629" alt="Company Logo" style="width: 100px; height: auto;">
         </div>
         <h1 style="color: #333;">Forgot Password address</h1>
         <p>Click the link below to reset your password:</p>

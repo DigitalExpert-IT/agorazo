@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Image from "next/image";
 
 interface ToastProps {
   message: string;
@@ -20,10 +21,10 @@ export const Toast: React.FC<ToastProps> = ({ message, status, onClose }) => {
       <div className={`bg-gray-600 text-white rounded shadow-lg`}>
         <div className='flex flex-row justify-center gap-10 p-4'>
         <div className={`w-10 h-10 flex items-center justify-center rounded-full ${status === "error" ? "bg-red-500" : "bg-green-500"}`}>
-          <img src={status === "error" ? "/error.svg" : "/success.svg"} alt={status} className='max-w-8'/>
+          <Image src={status === "error" ? "/error.svg" : "/success.svg"} alt={status} className='max-w-8'/>
         </div>
           <p className='font-600 text-md font-bold whitespace-nowrap overflow-hidden mt-1'>{message}</p>
-          <img src='/close.svg' alt='close' onClick={onClose} className='max-w-3'/>
+          <Image src='/close.svg' alt='close' onClick={onClose} className='max-w-3'/>
         </div>
       </div>
     </div>

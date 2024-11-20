@@ -10,7 +10,7 @@ export const Table = () => {
 
 
   return (
-    <div className="w-full p-10">
+    <div className="w-full">
       <div className="mx-auto px-4 sm:px-6">
         <div className="flex flex-row gap-5 justify-end ps-1.5 my-4">
             <div className="form-icon relative sm:block">

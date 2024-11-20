@@ -1,5 +1,6 @@
 import { User, LogOut, LogIn } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface ProfileNavbarProps {
   user: {
@@ -26,7 +27,7 @@ export const ProfileNavbar: React.FC<ProfileNavbarProps> = ({ user, onOpen, logO
           <div className="absolute px-4 -bottom-7 start-0">
             <div className="flex items-end">
             {isAuthenticated && (
-              <img
+              <Image
                 src={user.image || "/assets/images/client/02.jpg"}
                 className="rounded-full size-10 shadow dark:shadow-gray-700"
                 alt="User Avatar"

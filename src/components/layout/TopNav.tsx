@@ -1,10 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import Menu from "feather-icons-react";
 import React, { useState } from "react";
 import { ProfileNavbar } from "components/layout";
 import { Session } from "next-auth";
 import { User } from "lucide-react";
+import Image from "next/image";
 
 interface TopNavProps {
   toggleStat?: boolean;
@@ -25,18 +25,18 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat, auth, logOut }) => {
       <div className="header-bar flex justify-between">
         <div className="flex items-center space-x-1">
           <Link href="#" className="xl:hidden block me-2">
-            <img
+            <Image
               src="/assets/images/logo-icon-32.png"
               className="md:hidden block"
               alt=""
             />
             <span className="md:block hidden">
-              <img
+              <Image
                 src="/assets/images/logo-dark.png"
                 className="inline-block dark:hidden"
                 alt=""
               />
-              <img
+              <Image
                 src="/assets/images/logo-light.png"
                 className="hidden dark:inline-block"
                 alt=""
@@ -66,7 +66,7 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat, auth, logOut }) => {
                 onClick={() => setIsOpen(!isOpen)}
               >
               {auth ?
-                <img
+                <Image
                   src="/assets/images/client/02.jpg"
                   className="rounded-full"
                   alt=""

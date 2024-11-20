@@ -6,6 +6,7 @@ import Icon from "feather-icons-react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/router";
 import { Toast } from "components/ui";
+import Image from "next/image";
 
 export interface ILogin {
   email: string;
@@ -47,12 +48,12 @@ export default function Login() {
         <div className="flex justify-center">
           <div className="max-w-[400px] w-full m-auto p-6 bg-white dark:bg-slate-900 shadow-md dark:shadow-gray-800 rounded-md">
             <Link href="/">
-              <img
+              <Image
                 src={"/assets/images/logo-dark.png"}
                 className="mx-auto h-7 block dark:hidden"
                 alt=""
               />
-              <img
+              <Image
                 src={"/assets/images/logo-light.png"}
                 className="mx-auto h-7 dark:block hidden"
                 alt=""
