@@ -2,6 +2,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
+import {Tooltip} from "react-tooltip";
 
 export const BalanceInfo = () => {
   const [amount, setAmount] = useState("");
@@ -168,10 +169,14 @@ export const BalanceInfo = () => {
               <button
                 onClick={() => handleBuy(Number(amount))}
                 disabled={!amount || isLoading || !!error || session == null}
+                data-tip 
+                data-tooltip-content={session == null ? "Please Login First!" : ""}
+                data-tooltip-id="buyTooltip"
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? "Loading..." : "Buy ZENQ"}
               </button>
+              <Tooltip id="buyTooltip" />
             </div>
           </div>
         </div>
