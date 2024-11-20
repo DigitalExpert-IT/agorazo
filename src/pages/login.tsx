@@ -35,7 +35,7 @@ export default function Login() {
     if (status === 200) {
       setShowToast(true)
       setTimeout(() => {
-        router.push("/");
+        router.push("/dashboard");
       }, 3000);
     } else if (status as number >= 400) {
       setShowToast(true);
@@ -47,8 +47,8 @@ export default function Login() {
       <div className="container relative z-1">
         <div className="flex justify-center">
           <div className="max-w-[400px] w-full m-auto p-6 bg-white dark:bg-slate-900 shadow-md dark:shadow-gray-800 rounded-md">
-            <Link href="/">
-              <Image
+            <Link href="/dashboard">
+              <img
                 src={"/assets/images/logo-dark.png"}
                 width={116}
                 height={28}

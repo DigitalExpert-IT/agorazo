@@ -14,12 +14,12 @@ export const AuthLayout = ({ children }: IAuthWrapper) => {
       </section>
       <div className="fixed bottom-3 end-3">
         <Link
-          href="/"
+          href="/login"
           className="back-button btn btn-icon bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white rounded-full"
         >
           <Icon icon="arrow-left" className="size-4" />
         </Link>
-        </div>
       </div>
+    </div>
   );
 };
