@@ -76,6 +76,8 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat, auth, logOut }) => {
                   src="/assets/images/client/02.jpg"
                   className="rounded-full"
                   alt=""
+                  width={100}
+                  height={100}
                 />
                 :
                 <User className="text-[16px] align-middle me-1 ml-1" />
