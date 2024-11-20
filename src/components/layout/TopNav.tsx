@@ -35,11 +35,15 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat, auth, logOut }) => {
                 src="/assets/images/logo-dark.png"
                 className="inline-block dark:hidden"
                 alt=""
+                width={116}
+                height={28}
               />
               <Image
                 src="/assets/images/logo-light.png"
                 className="hidden dark:inline-block"
                 alt=""
+                width={116}
+                height={28}
               />
             </span>
           </Link>

@@ -36,11 +36,15 @@ export default function ResetPassword() {
                 src={"/assets/images/logo-dark.png"}
                 className="mx-auto h-7 block dark:hidden"
                 alt=""
+                width={116}
+                height={28}
               />
               <Image
                 src={"/assets/images/logo-light.png"}
                 className="mx-auto h-7 dark:block hidden"
                 alt=""
+                width={116}
+                height={28}
               />
             </Link>
             <h5 className="my-6 text-xl font-semibold">Reset Your Password</h5>

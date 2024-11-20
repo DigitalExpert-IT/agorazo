@@ -50,6 +50,8 @@ export default function Login() {
             <Link href="/">
               <Image
                 src={"/assets/images/logo-dark.png"}
+                width={116}
+                height={28}
                 className="mx-auto h-7 block dark:hidden"
                 alt=""
               />
@@ -57,6 +59,8 @@ export default function Login() {
                 src={"/assets/images/logo-light.png"}
                 className="mx-auto h-7 dark:block hidden"
                 alt=""
+                width={116}
+                height={28}
               />
             </Link>
             <h5 className="my-6 text-xl font-semibold">Login</h5>

@@ -14,13 +14,15 @@ export const Navbar = () => {
           <Link href="/index">
             <Image
               src="/assets/images/logo-dark.png"
-              height="24"
+              width={116}
+              height={28}
               className="block dark:hidden"
               alt=""
             />
             <Image
               src="/assets/images/logo-light.png"
-              height="24"
+              width={116}
+              height={28}
               className="hidden dark:block"
               alt=""
             />
