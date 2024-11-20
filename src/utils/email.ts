@@ -14,7 +14,7 @@ export const sendVerificationEmail = async (
   await resend.emails.send({
     from: "Acme <onboarding@resend.dev>",
     to: email,
-    subject: "Giglink - Verify your email address",
+    subject: "Zenq - Verify your email address",
     html: isVerify
       ? `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
@@ -27,9 +27,9 @@ export const sendVerificationEmail = async (
         <p style="margin-top: 20px;">If you didn't request this, please ignore this email.</p>
         <hr style="margin: 30px 0;">
         <div style="text-align: center; font-size: 12px; color: #777;">
-          <p>&copy; ${new Date().getFullYear()} Giglink. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} Zenq. All rights reserved.</p>
           <p>123 Business Street, City, Country</p>
-          <p><a href="https://giglink.com/privacy" style="color: #007BFF; text-decoration: none;">Privacy Policy</a> | <a href="https://giglink.com/terms" style="color: #007BFF; text-decoration: none;">Terms of Service</a></p>
+          <p><a href="https://zenqira.com/privacy" style="color: #007BFF; text-decoration: none;">Privacy Policy</a> | <a href="https://zenqira.com/terms" style="color: #007BFF; text-decoration: none;">Terms of Service</a></p>
         </div>
       </div>
     `
@@ -44,9 +44,9 @@ export const sendVerificationEmail = async (
         <p style="margin-top: 20px;">If you didn't request this, please ignore this email.</p>
         <hr style="margin: 30px 0;">
         <div style="text-align: center; font-size: 12px; color: #777;">
-          <p>&copy; ${new Date().getFullYear()} Giglink. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} Zenq. All rights reserved.</p>
           <p>123 Business Street, City, Country</p>
-          <p><a href="https://giglink.com/privacy" style="color: #007BFF; text-decoration: none;">Privacy Policy</a> | <a href="https://giglink.com/terms" style="color: #007BFF; text-decoration: none;">Terms of Service</a></p>
+          <p><a href="https://zenqira.com/privacy" style="color: #007BFF; text-decoration: none;">Privacy Policy</a> | <a href="https://zenqira.com/terms" style="color: #007BFF; text-decoration: none;">Terms of Service</a></p>
         </div>
       </div>
     `,

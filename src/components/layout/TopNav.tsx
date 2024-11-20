@@ -28,7 +28,9 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat, auth, logOut }) => {
             <Image
               src="/assets/images/logo-icon-32.png"
               className="md:hidden block"
-              alt=""
+              alt="logo-icon"
+              width={32}
+              height={32}
             />
             <span className="md:block hidden">
               <Image
