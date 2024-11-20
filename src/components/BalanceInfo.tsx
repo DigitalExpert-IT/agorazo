@@ -167,7 +167,7 @@ export const BalanceInfo = () => {
             <div className="flex space-x-5">
               <button
                 onClick={() => handleBuy(Number(amount))}
-                disabled={!amount || isLoading || !!error || session !== null}
+                disabled={!amount || isLoading || !!error || session == null}
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? "Loading..." : "Buy ZENQ"}
