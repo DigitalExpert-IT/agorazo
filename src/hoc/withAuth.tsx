@@ -1,35 +1,41 @@
-import React, { useEffect } from "react";
-import { LayoutIllustration } from "components/layout";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-export const withAuth = (WrappedComponent: () => JSX.Element | null) => {
-  const RegistrationWrapper = () => {
-    const { data: session } = useSession();
-    if (!session) {
-      return <RegistrationRequired />;
+type ComponentType = React.ComponentType<unknown>;
+
+export const withAuth = <P extends object>(
+  WrappedComponent: ComponentType,
+  options?: {
+    redirectTo?: string;
+  }
+) => {
+  const AuthWrapper: React.FC<P> = props => {
+    const router = useRouter();
+    const { data: session, status } = useSession();
+    const isLoading = status === "loading";
+    const loginPath = options?.redirectTo || "/login";
+
+    useEffect(() => {
+      // If auth is finished loading and there's no session, redirect to login
+      if (!isLoading && !session) {
+        router.replace(loginPath);
+      }
+    }, [isLoading, session, router, loginPath]);
+
+    // While loading or redirecting, show nothing
+    if (isLoading || !session) {
+      return null;
     }
-    return <WrappedComponent />;
+
+    // If authenticated, show the protected component
+    return <WrappedComponent {...props} />;
   };
-  return RegistrationWrapper;
-};
 
-const RegistrationRequired = () => {
-  const router = useRouter();
+  // Set display name for better debugging
+  AuthWrapper.displayName = `withAuth(${
+    WrappedComponent.displayName || WrappedComponent.name || "Component"
+  })`;
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      router.push("/login");
-    }, 2000);
-
-    return () => clearTimeout(timeoutId);
-  }, [router]);
-
-  return (
-    <LayoutIllustration
-      illustrationUri="/assets/images/registration-required.svg"
-      title={"Login Required"}
-      description={"You need to be login to access this page"}
-    />
-  );
+  return AuthWrapper;
 };

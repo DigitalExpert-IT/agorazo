@@ -6,16 +6,17 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export const sendVerificationEmail = async (
   email: string,
   verifyToken: string,
-  isVerify: boolean,
+  isVerify: boolean
 ) => {
   const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verifyToken}`;
-  const resetPasswordUrl = `${process.env.NEXT_PUBLIC_APP_URL}/new-password?token=${verifyToken}`
+  const resetPasswordUrl = `${process.env.NEXT_PUBLIC_APP_URL}/new-password?token=${verifyToken}`;
 
   await resend.emails.send({
     from: "Acme <onboarding@resend.dev>",
     to: email,
     subject: "Giglink - Verify your email address",
-    html: isVerify ? `
+    html: isVerify
+      ? `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
           <img src="https://ik.imagekit.io/msxxxaegj/coinpayment/logo-dummy.png?updatedAt=1731895642836" alt="Company Logo" style="width: 100px; height: auto;">
@@ -31,7 +32,8 @@ export const sendVerificationEmail = async (
           <p><a href="https://giglink.com/privacy" style="color: #007BFF; text-decoration: none;">Privacy Policy</a> | <a href="https://giglink.com/terms" style="color: #007BFF; text-decoration: none;">Terms of Service</a></p>
         </div>
       </div>
-    ` : `
+    `
+      : `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
         <div style="text-align: center; margin-bottom: 20px;">
           <img src="https://ik.imagekit.io/msxxxaegj/coinpayment/logo-dummy.png?updatedAt=1731895642836" alt="Company Logo" style="width: 100px; height: auto;">
@@ -48,7 +50,7 @@ export const sendVerificationEmail = async (
         </div>
       </div>
     `,
-});
+  });
 };
 
 export const generateVerificationToken = () => {
