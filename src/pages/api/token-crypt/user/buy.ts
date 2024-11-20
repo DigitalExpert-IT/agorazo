@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getUserBalance } from "utils/balance";
 import { getSession } from "next-auth/react";
-import { prisma } from "../prisma";
+import { prisma } from "../../prisma";
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,6 +24,7 @@ export default async function handler(
           userId: session?.user?.id as string,
           value: amount,
           type: "deposit",
+          status: "success"
         },
       });
 

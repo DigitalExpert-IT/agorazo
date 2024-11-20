@@ -115,6 +115,7 @@ model Transaction {
   userId String
   value  Int
   type   String
+  status String
 
   user User @relation(fields: [userId], references: [id])
 }
