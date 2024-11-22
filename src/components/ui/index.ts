@@ -1,4 +1,5 @@
 export * from "./Table";
-export * from "./tableColumn";
 export * from "./toast";
+export * from "./Avatar";
 export * from "./Spinner";
+export * from "./tableColumn";

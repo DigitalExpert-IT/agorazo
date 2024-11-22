@@ -71,7 +71,6 @@ export default async function handler(
       currency2: "USDT.BEP20",
       amount: amount,
       address: OWNER_USDT_ADDRESS,
-
       buyer_email: session.email,
     });
 
@@ -82,7 +81,7 @@ export default async function handler(
     await prisma.transaction.create({
       data: {
         userId: user.id,
-        value: Math.floor(amount * 100), // Convert to smallest unit (cents)
+        value: Math.floor(amount * 100),
         type: "DEPOSIT",
         status: "PENDING",
         reference: transaction.status_url,

@@ -11,7 +11,7 @@ export const TableColumn: React.FC<IUser> = ({
   reference,
   status,
 }) => {
-  const shortenedReference = reference.length > 8 ? reference.slice(0, 8) + "..." : reference;
+  const shortenedReference = reference.length > 8 ? reference.slice(0, 20) + "..." : reference;
 
   return (
     <tr>

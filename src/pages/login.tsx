@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AuthLayout } from "../components/layout/AuthLayout";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Icon from "feather-icons-react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/router";
 import { Toast } from "components/ui";
 import Image from "next/image";
+import { Eye, EyeClosed } from "lucide-react";
 
 export interface ILogin {
   email: string;
@@ -93,7 +93,7 @@ export default function Login() {
                       className="px-3"
                       aria-label="Toggle password visibility"
                     >
-                      {hide ? <Icon icon="eye-off" className="text-gray-500 dark:text-slate-400" /> : <Icon icon="eye" className="text-gray-500 dark:text-slate-400" />}
+                      {hide ? <EyeClosed className="text-gray-500 dark:text-slate-400" /> : <Eye className="text-gray-500 dark:text-slate-400" />}
                     </button>
                   </div>
                 </div>

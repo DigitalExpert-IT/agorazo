@@ -1,10 +1,10 @@
 import Link from "next/link";
-import Menu from "feather-icons-react";
 import React, { useState } from "react";
 import { ProfileNavbar } from "components/layout";
 import { Session } from "next-auth";
-import { User } from "lucide-react";
+import { Menu } from "lucide-react";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "components/ui";
 
 interface TopNavProps {
   toggleStat?: boolean;
@@ -55,36 +55,18 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat, auth, logOut }) => {
             className="btn btn-icon btn-sm rounded-full inline-flex bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white"
           >
             <div onClick={() => toggleHandler()}>
-              <Menu className="size-4" icon="menu" />
+              <Menu className="size-4" />
             </div>
           </Link>
         </div>
 
         <ul className="list-none mb-0 space-x-1">
           <li className="dropdown inline-block relative">
-            <button
-              data-dropdown-toggle="dropdown"
-              className="dropdown-toggle items-center"
-              type="button"
-            >
-              <span
-                className="btn btn-icon btn-sm rounded-full inline-flex bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-              {auth ?
-                <Image
-                  src="/assets/images/client/02.jpg"
-                  className="rounded-full"
-                  alt=""
-                  width={100}
-                  height={100}
-                />
-                :
-                <User className="text-[16px] align-middle me-1 ml-1" />
-              }
-              </span>
-            </button>
-              <ProfileNavbar logOut={() => logOut()} onOpen={isOpen} user={auth?.user} token={auth?.token}  expires={auth?.expires} />
+            <Avatar onClick={() => setIsOpen(!isOpen)} className="hover:cursor-pointer">
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>{auth.user.name}</AvatarFallback>
+            </Avatar>
+            <ProfileNavbar logOut={() => logOut()} onOpen={isOpen} user={auth?.user} token={auth?.token} expires={auth?.expires} />
           </li>
         </ul>
       </div>

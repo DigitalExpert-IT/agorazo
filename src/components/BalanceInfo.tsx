@@ -1,18 +1,18 @@
 import Image from "next/image";
 import {Tooltip} from "react-tooltip";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
-import { useRouter } from "next/router";
 
 export const BalanceInfo = () => {
   const router = useRouter();
-  const [amount, setAmount] = useState("");
   const { data: session } = useSession();
-  const [tokenPrice, setTokenPrice] = useState<number | null>(null);
-  const [prevPrice, setPrevPrice] = useState<number | null>(null);
+  const [amount, setAmount] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [tokenPrice, setTokenPrice] = useState<number | null>(null);
+  const [prevPrice, setPrevPrice] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchTokenPrice = async () => {

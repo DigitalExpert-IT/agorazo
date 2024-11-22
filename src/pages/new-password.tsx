@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AuthLayout } from "components/layout/AuthLayout";
 import { useForm, SubmitHandler } from "react-hook-form";
-import Icon from "feather-icons-react";
 import { useUpdatePassword } from "hooks";
 import { useRouter } from "next/router";
 import { Toast } from "components/ui";
 import Image from "next/image";
+import { Eye, EyeClosed } from "lucide-react";
 
 interface INewPassword {
   password: string;
@@ -106,7 +106,7 @@ export default function ResetPassword() {
                         className="px-3"
                         aria-label="Toggle password visibility"
                       >
-                        {hideFirst ? <Icon icon="eye-off" className="text-gray-500 dark:text-slate-400" /> : <Icon icon="eye" className="text-gray-500 dark:text-slate-400" />}
+                        {hideFirst ? <EyeClosed className="text-gray-500 dark:text-slate-400" /> : <Eye className="text-gray-500 dark:text-slate-400" />}
                       </button>
                     </div>
                     {errors.password && (
@@ -134,7 +134,7 @@ export default function ResetPassword() {
                         className="px-3"
                         aria-label="Toggle password visibility"
                       >
-                        {hideSecond ? <Icon icon="eye-off" className="text-gray-500 dark:text-slate-400" /> : <Icon icon="eye" className="text-gray-500 dark:text-slate-400" />}
+                        {hideSecond ? <EyeClosed className="text-gray-500 dark:text-slate-400" /> : <Eye className="text-gray-500 dark:text-slate-400" />}
                       </button>
                     </div>
                     {errors.confPassword && (
