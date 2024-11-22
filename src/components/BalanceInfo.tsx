@@ -1,10 +1,12 @@
 import Image from "next/image";
+import {Tooltip} from "react-tooltip";
+import { useSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
-import { useSession } from "next-auth/react";
-import {Tooltip} from "react-tooltip";
+import { useRouter } from "next/router";
 
 export const BalanceInfo = () => {
+  const router = useRouter();
   const [amount, setAmount] = useState("");
   const { data: session } = useSession();
   const [tokenPrice, setTokenPrice] = useState<number | null>(null);
@@ -58,15 +60,18 @@ export const BalanceInfo = () => {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Transaction failed');
       }
-      const data = await response.json();
-      console.log(data);
-      // console.log(`Buying ZENQ tokens for ${amount} USDT`);
-      // const tokensToReceive = Number(amount) / tokenPrice;
-      // console.log(
-      //   `You will receive approximately ${tokensToReceive.toFixed(
-      //     6
-      //   )} ZENQ tokens`
-      // );
+      const paymentData = await response.json();
+      router.push({
+        pathname: '/payment-information',
+        query: {
+          qrCode: paymentData.qrCode,
+          timeout: paymentData.timeout,
+          amount: paymentData.amount,
+          address: paymentData.address,
+          status: paymentData.status
+        }
+      })
+      
     } catch (err) {
       console.error("Error during purchase:", err);
     }

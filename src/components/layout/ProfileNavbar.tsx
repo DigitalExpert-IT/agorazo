@@ -31,6 +31,8 @@ export const ProfileNavbar: React.FC<ProfileNavbarProps> = ({ user, onOpen, logO
                 src={user.image || "/assets/images/client/02.jpg"}
                 className="rounded-full size-10 shadow dark:shadow-gray-700"
                 alt="User Avatar"
+                width={10}
+                height={10}
               />
             )}
             </div>

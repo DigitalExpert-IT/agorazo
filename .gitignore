@@ -40,5 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-#local database
-agorazo.db
+# Prisma generated files
+/prisma/agorazo.db
+/prisma/migrations/

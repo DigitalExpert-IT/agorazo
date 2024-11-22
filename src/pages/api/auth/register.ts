@@ -37,7 +37,7 @@ export default async function handler(
       });
     } catch (error) {
       console.error("Registration error:", error);
-      res.status(500).json({ error: "Error registering user" });
+      res.status(500).json({ error });
     }
   } else {
     res.status(405).json({ error: "Method Not Allowed" });

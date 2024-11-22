@@ -10,6 +10,7 @@ type TransactionResponse = {
   timeout: number;
   amount: string;
   address: string;
+  status: string;
 };
 
 type ErrorResponse = {
@@ -63,7 +64,8 @@ export default async function handler(
       qrCode: transaction.qrcode_url,
       timeout: transaction.timeout,
       amount: transaction.amount,
-      address: transaction.address
+      address: transaction.address,
+      status: transaction.status_url,
     });
   } catch (error) {
     console.error("CoinPayments transaction error:", error);
