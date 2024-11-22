@@ -107,11 +107,10 @@ export default function Login() {
                 </div>
 
                 <div className="mb-4">
-                  <input
+                  <button
                     type="submit"
                     className="btn bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white rounded-full w-full"
-                    value="Login / Sign in"
-                  />
+                  >Login / Sign in</button>
                 </div>
 
                 <div className="text-center">

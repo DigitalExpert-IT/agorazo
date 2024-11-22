@@ -49,7 +49,6 @@ export const BalanceInfo = () => {
     if (!amount || !tokenPrice) return;
 
     try {
-      console.log(amount)
       const response = await fetch("/api/coinpayment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -68,7 +67,8 @@ export const BalanceInfo = () => {
           timeout: paymentData.timeout,
           amount: paymentData.amount,
           address: paymentData.address,
-          status: paymentData.status
+          status: paymentData.status,
+          email: paymentData.email
         }
       })
       

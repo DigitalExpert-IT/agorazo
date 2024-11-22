@@ -1,5 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { Coinpayments } from "coinpayments";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { getToken } from "next-auth/jwt";
+import { prisma } from "pages/api/prisma";
 
 type RequestBody = {
   amount: number;
@@ -11,6 +13,7 @@ type TransactionResponse = {
   amount: string;
   address: string;
   status: string;
+  email:string,
 };
 
 type ErrorResponse = {
@@ -38,6 +41,21 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  const session = await getToken({ req });
+
+  // Check if user is authenticated
+  if (!session?.email) {
+    return res.status(401).json({ error: "Unauthorized: Please log in first" });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.email }
+  });
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
   const { amount } = req.body as RequestBody;
   if (!amount || typeof amount !== "number" || amount <= 0) {
     return res.status(400).json({ error: "Invalid amount provided" });
@@ -53,12 +71,21 @@ export default async function handler(
       currency2: "USDT.BEP20",
       amount: amount,
       address: OWNER_USDT_ADDRESS,
-      buyer_email: "tuxpower27@gmail.com",
+      buyer_email: session.email,
     });
 
     if (!transaction?.status_url) {
       throw new Error("Invalid transaction response");
     }
+
+    await prisma.transaction.create({
+      data: {
+        userId: user.id,
+        value: Math.floor(amount * 100), // Convert to smallest unit (cents)
+        type: "DEPOSIT",
+        status: "PENDING",
+      },
+    });
 
     return res.status(200).json({
       qrCode: transaction.qrcode_url,
@@ -66,6 +93,7 @@ export default async function handler(
       amount: transaction.amount,
       address: transaction.address,
       status: transaction.status_url,
+      email: session.email,
     });
   } catch (error) {
     console.error("CoinPayments transaction error:", error);
