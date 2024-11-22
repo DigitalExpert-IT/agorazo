@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { TableColumn } from "./tableColumn";
 import { Users } from "constant";
 import { Search } from "lucide-react";
+import { useTransactions } from "hooks";
+
 
 export const Table = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isAdmin, setIsAdmin] = useState<boolean>(true)
   const totalPage = Math.ceil(Users.length/5)
+  const { transactions } = useTransactions();
 
 
   return (
@@ -37,13 +40,16 @@ export const Table = () => {
             <thead className="dark:bg-gray-700 bg-gray-200">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  User
+                  Date
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Asset Amount
+                  Asset
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Join Since
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Referrence
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Action
@@ -51,9 +57,17 @@ export const Table = () => {
               </tr>
             </thead>
             <tbody className="dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {Users.slice(0,5).map((item, idx) => (
-                <TableColumn key={idx} profile_email={item.profile_email} profile_name={item.profile_name} amount={item.amount} member_since={item.member_since}/>
-              ))}
+            {transactions?.length ? (
+                  transactions.map((item, idx) => (
+                    <TableColumn key={idx} reference={item.reference} transaction_date={item.createdAt} amount={item.value} status={item.status} />
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                      No transactions available
+                    </td>
+                  </tr>
+                )}
             </tbody>
           </table>
         </div>

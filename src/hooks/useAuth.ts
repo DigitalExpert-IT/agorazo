@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 
 interface IResponse {
   message?: string;
@@ -9,6 +11,13 @@ export const UseRegister = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<IResponse>()
   const [showToast, setShowToast] = useState<boolean>(false)
+  const [sessionData, setSessionData] = useState<Session | null>(null)
+
+  // Fetch session after registration
+  const fetchSession = async () => {
+    const session = await getSession();
+    setSessionData(session);
+  };
 
   const registerUser = async (name: string, email: string, password: string) => {
     setIsLoading(true)
@@ -16,7 +25,7 @@ export const UseRegister = () => {
     setResponse(undefined)
 
     try {
-      const res = await fetch('api/auth/register', {
+      const res = await fetch('/api/auth/register', { // Ensure correct endpoint is used
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,12 +35,19 @@ export const UseRegister = () => {
 
       const data: IResponse = await res.json()
 
+      if (res.status >= 400) {
+        setResponse(data)
+        setShowToast(true)  // Show error toast if status >= 400
+        return;
+      }
+
       setResponse(data)
 
-      if (res.status >= 400) {
-        setShowToast(true)  
-      } else if (data.message) {
-        setShowToast(true)
+      // Fetch the session after a successful registration
+      await fetchSession();
+
+      if (data.message) {
+        setShowToast(true) // Show success toast if message exists
       }
 
     } catch (error) {
@@ -42,11 +58,17 @@ export const UseRegister = () => {
     }
   }
 
+  useEffect(() => {
+    // Optionally check session on component mount
+    fetchSession();
+  }, []);
+
   return {
     response,
     registerUser,
     isLoading,
     showToast,
+    sessionData,
     setShowToast
   }
 }

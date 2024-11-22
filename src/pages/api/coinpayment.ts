@@ -71,6 +71,7 @@ export default async function handler(
       currency2: "USDT.BEP20",
       amount: amount,
       address: OWNER_USDT_ADDRESS,
+
       buyer_email: session.email,
     });
 
@@ -84,6 +85,7 @@ export default async function handler(
         value: Math.floor(amount * 100), // Convert to smallest unit (cents)
         type: "DEPOSIT",
         status: "PENDING",
+        reference: transaction.status_url,
       },
     });
 
