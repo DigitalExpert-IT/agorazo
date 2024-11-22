@@ -60,6 +60,8 @@ export default NextAuth({
         //@ts-expect-error "the type of User at jwt not included token"
         token.jwt = user.token;
         token.email = user.email;
+         //@ts-expect-error "the type of User at jwt not included token"
+        token.role = user.role;
       }
       return token;
     },
@@ -72,6 +74,8 @@ export default NextAuth({
         session.user.email = token.email;
         //@ts-expect-error "the type of User at jwt not included email"
         session.user.id = token.userId;
+        //@ts-expect-error "the type of User at jwt not included email"
+        session.user.role = token.role
       }
       return session;
     },

@@ -3,9 +3,11 @@ export interface IUser {
   reference: string;
   amount: number;
   status: string;
+  email?: string;
 }
 
 export const TableColumn: React.FC<IUser> = ({
+  email,
   transaction_date,
   amount,
   reference,
@@ -15,6 +17,9 @@ export const TableColumn: React.FC<IUser> = ({
 
   return (
     <tr>
+      <td className="px-6 py-4">
+        <div className="text-sm text-gray-900 dark:text-gray-100">{email}</div>
+      </td>
       <td className="px-6 py-4">
         <div className="flex items-center">
           <div>

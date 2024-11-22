@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { TableColumn } from "./tableColumn";
-import { Users } from "constant";
 import { Search } from "lucide-react";
-import { useTransactions } from "hooks";
+import { UseRegister, useTransactions } from "hooks";
 
 
 export const Table = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isAdmin, setIsAdmin] = useState<boolean>(true)
-  const totalPage = Math.ceil(Users.length/5)
-  const { transactions } = useTransactions();
+  const { sessionData }  = UseRegister()
+  const { 
+    transactions,
+    loading,
+    error,
+    currentPage,
+    totalPages,
+    setPage,
+  } = useTransactions();
 
 
   return (
@@ -26,7 +30,7 @@ export const Table = () => {
                 placeholder="Search..."
               />
             </div>
-            {isAdmin ?
+            {sessionData?.user.role === "admin" ?
             <div>
               <button
                 className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
@@ -39,6 +43,9 @@ export const Table = () => {
           <table className="w-full table-auto">
             <thead className="dark:bg-gray-700 bg-gray-200">
               <tr>
+                <th style={sessionData?.user.role === "admin" ? {display: "block"} : {display: "none"}} className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  User
+                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Date
                 </th>
@@ -59,11 +66,15 @@ export const Table = () => {
             <tbody className="dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {transactions?.length ? (
                   transactions.map((item, idx) => (
-                    <TableColumn key={idx} reference={item.reference} transaction_date={item.createdAt} amount={item.value} status={item.status} />
+                    <TableColumn key={idx} email={item.user.email || ""} reference={item.reference} transaction_date={item.createdAt} amount={item.value} status={item.status} />
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={4} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                    <td 
+                      colSpan={6}
+                      className="px-6 py-4 text-center text-gray-500 dark:text-gray-400"
+                      style={{ verticalAlign: "middle" }}
+                      >
                       No transactions available
                     </td>
                   </tr>
@@ -74,18 +85,21 @@ export const Table = () => {
         <div className="flex justify-end mt-5">
               <div className="flex flex-row gap-2">
                 <button
+                  onClick={() => setPage(currentPage - 1)}
                   className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
                     Prev
                 </button>
-                {Array.from({ length: totalPage }, (_, idx) => (
+                {Array.from({ length: totalPages }, (_, idx) => (
                   <button
                     className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
                     key={idx}
+                    onClick={() => setPage(idx + 1)}
                   >
                     {idx + 1}
                   </button>
                 ))}
                 <button
+                  onClick={() => setPage(currentPage + 1)}
                   className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
                     Next
                 </button>

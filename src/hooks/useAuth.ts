@@ -11,7 +11,7 @@ export const UseRegister = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<IResponse>()
   const [showToast, setShowToast] = useState<boolean>(false)
-  const [sessionData, setSessionData] = useState<Session | null>(null)
+  const [sessionData, setSessionData] = useState<Session | null>()
 
   // Fetch session after registration
   const fetchSession = async () => {
