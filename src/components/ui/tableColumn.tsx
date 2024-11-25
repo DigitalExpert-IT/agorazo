@@ -4,6 +4,7 @@ export interface IUser {
   amount: number;
   status: string;
   email?: string;
+  role?: string;
 }
 
 export const TableColumn: React.FC<IUser> = ({
@@ -12,12 +13,13 @@ export const TableColumn: React.FC<IUser> = ({
   amount,
   reference,
   status,
+  role
 }) => {
   const shortenedReference = reference.length > 8 ? reference.slice(0, 20) + "..." : reference;
 
   return (
     <tr>
-      <td className="px-6 py-4">
+      <td style={role === "admin" ?  {display: "block"} : {display: "none"}} className="px-6 py-4">
         <div className="text-sm text-gray-900 dark:text-gray-100">{email}</div>
       </td>
       <td className="px-6 py-4">

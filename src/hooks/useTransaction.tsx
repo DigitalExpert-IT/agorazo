@@ -56,8 +56,8 @@ export const useTransactions = (): UseTransactionsResult => {
       }
 
       const data = await response.json();
-      setTransactions(data.transactions); // Assuming API returns transactions array
-      setTotalPages(data.totalPages); // Assuming API returns total number of pages
+      setTransactions(data);
+      setTotalPages(data.length());
     } catch (err) {
       setError(err + "Failed to fetch transactions");
     } finally {
