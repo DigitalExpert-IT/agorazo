@@ -41,7 +41,7 @@ export const useTransactions = (): UseTransactionsResult => {
 
     try {
       const response = await fetch(
-        `/api/token-crypt/transaction?page=${currentPage}`,
+        `/api/token-crypt/transaction?page=${currentPage}&limit=5`,
         {
           method: "GET",
           headers: {
@@ -55,9 +55,11 @@ export const useTransactions = (): UseTransactionsResult => {
         throw new Error(await response.text());
       }
 
-      const data = await response.json();
-      setTransactions(data);
-      setTotalPages(data.length());
+      const { transactions, totalPages, currentPage: current } = await response.json();
+
+      setTransactions(transactions);
+      setTotalPages(totalPages);
+      setCurrentPage(current);
     } catch (err) {
       setError(err + "Failed to fetch transactions");
     } finally {

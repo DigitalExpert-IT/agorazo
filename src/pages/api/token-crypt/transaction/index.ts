@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     try {
-        const session = await getToken({ req });
+      const session = await getToken({ req });
 
       if (!session) {
         return res.status(401).json({ message: "Unauthorized" });
@@ -16,22 +16,36 @@ export default async function handler(
 
       const { userId, role } = session as { userId: string; role: string };
 
+      const { page = 1, limit = 10 } = req.query;
+      const pageNumber = parseInt(page as string, 10);
+      const pageLimit = parseInt(limit as string, 10);
+
+      const whereClause = role === "admin" ? {} : { userId };
+
+      const totalRecords = await prisma.transaction.count({ where: whereClause });
+      const totalPages = Math.ceil(totalRecords / pageLimit);
+
       const transactions = await prisma.transaction.findMany({
-        where: role === "admin" ? {} : { userId },
-        include : {
-            user: {
-                select: {
-                    email: true
-                }
-            }
-        }
+        where: whereClause,
+        include: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+        skip: (pageNumber - 1) * pageLimit,
+        take: pageLimit,
+        orderBy: {
+          createdAt: "desc",
+        },
       });
 
-      const transactionsWithEmail = transactions.map((transaction) => ({
-        ...transaction,
-      }));
-
-      return res.status(200).json(transactionsWithEmail);
+      return res.status(200).json({
+        transactions,
+        totalPages,
+        currentPage: pageNumber,
+      });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Internal Server Error" });
