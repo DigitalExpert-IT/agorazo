@@ -68,9 +68,10 @@ export const Table = () => {
                     key={idx}
                     email={item.user.email || ""}
                     reference={item.reference}
-                    transaction_date={item.createdAt}
+                    transaction_date={item.createdAt.toString()}
                     amount={item.value}
                     status={item.status}
+                    userRole={sessionData?.user.role || ""}
                   />
                 ))
               ) : (
@@ -85,6 +86,7 @@ export const Table = () => {
                 </tr>
               )}
             </tbody>
+
           </table>
         </div>
         <div className="flex justify-end mt-5">
