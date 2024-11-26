@@ -5,6 +5,7 @@ interface Transaction {
   id: string;
   userId: string;
   value: number;
+  valueToken: number;
   type: string;
   status: string;
   reference: string;

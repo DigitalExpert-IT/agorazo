@@ -5,6 +5,7 @@ import { prisma } from "pages/api/prisma";
 
 type RequestBody = {
   amount: number;
+  valueToken: number;
 };
 
 type TransactionResponse = {
@@ -13,7 +14,7 @@ type TransactionResponse = {
   amount: string;
   address: string;
   status: string;
-  email:string,
+  email: string,
 };
 
 type ErrorResponse = {
@@ -56,7 +57,7 @@ export default async function handler(
     return res.status(404).json({ error: "User not found" });
   }
 
-  const { amount } = req.body as RequestBody;
+  const { amount, valueToken } = req.body as RequestBody;
   if (!amount || typeof amount !== "number" || amount <= 0) {
     return res.status(400).json({ error: "Invalid amount provided" });
   }
@@ -77,11 +78,12 @@ export default async function handler(
     if (!transaction?.status_url) {
       throw new Error("Invalid transaction response");
     }
-
+    console.log(valueToken)
     await prisma.transaction.create({
       data: {
         userId: user.id,
-        value: Math.floor(amount * 100),
+        value: amount,
+        valueToken,
         type: "DEPOSIT",
         status: "PENDING",
         reference: transaction.status_url,

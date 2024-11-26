@@ -69,7 +69,7 @@ export const Table = () => {
                     email={item.user.email || ""}
                     reference={item.reference}
                     transaction_date={item.createdAt.toString()}
-                    amount={item.value}
+                    amount={item.valueToken}
                     status={item.status}
                     userRole={sessionData?.user.role || ""}
                   />

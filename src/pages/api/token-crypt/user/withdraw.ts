@@ -24,7 +24,9 @@ export default async function handler(
           userId: session?.user?.id as string,
           value: amount,
           type: "withdraw",
-          status: "pending"
+          status: "pending",
+          reference: "",
+          valueToken: 0,
         },
       });
 

@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === "GET") {
     try {
-        const session = await getToken({req})
+      const session = await getToken({ req })
 
       if (!session) {
         return res.status(401).json({ message: "Unauthorized" });

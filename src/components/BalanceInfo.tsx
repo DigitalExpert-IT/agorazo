@@ -1,5 +1,5 @@
 import Image from "next/image";
-import {Tooltip} from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
@@ -13,6 +13,7 @@ export const BalanceInfo = () => {
   const [error, setError] = useState<string | null>(null);
   const [tokenPrice, setTokenPrice] = useState<number | null>(null);
   const [prevPrice, setPrevPrice] = useState<number | null>(null);
+
 
   useEffect(() => {
     const fetchTokenPrice = async () => {
@@ -46,20 +47,26 @@ export const BalanceInfo = () => {
   }, []);
 
   const handleBuy = async (amount: number) => {
-    if (!amount || !tokenPrice) return;
+    if (!amount || amount <= 0 || !tokenPrice) return;
+    const valueToken = Number((Number(amount) / tokenPrice).toFixed(6));
 
     try {
       const response = await fetch("/api/coinpayment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount }),
+        body: JSON.stringify({
+          amount,
+          valueToken
+        }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Transaction failed');
       }
+
       const paymentData = await response.json();
+
       router.push({
         pathname: '/payment-information',
         query: {
@@ -70,8 +77,8 @@ export const BalanceInfo = () => {
           status: paymentData.status,
           email: paymentData.email
         }
-      })
-      
+      });
+
     } catch (err) {
       console.error("Error during purchase:", err);
     }
@@ -109,9 +116,8 @@ export const BalanceInfo = () => {
               <>
                 <div className="flex items-center justify-between">
                   <p
-                    className={`text-3xl font-bold ${
-                      priceChange! >= 0 ? "text-green-500" : "text-red-500"
-                    } `}
+                    className={`text-3xl font-bold ${priceChange! >= 0 ? "text-green-500" : "text-red-500"
+                      } `}
                   >
                     {formatPrice(tokenPrice)}
                   </p>
@@ -174,7 +180,7 @@ export const BalanceInfo = () => {
               <button
                 onClick={() => handleBuy(Number(amount))}
                 disabled={!amount || isLoading || !!error || session == null}
-                data-tip 
+                data-tip
                 data-tooltip-content={session == null ? "Please Login First!" : ""}
                 data-tooltip-id="buyTooltip"
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
