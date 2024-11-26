@@ -78,7 +78,6 @@ export default async function handler(
     if (!transaction?.status_url) {
       throw new Error("Invalid transaction response");
     }
-    console.log(valueToken)
     await prisma.transaction.create({
       data: {
         userId: user.id,

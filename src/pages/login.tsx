@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { AuthLayout } from "../components/layout/AuthLayout";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
+import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Toast } from "components/ui";
 import Image from "next/image";
@@ -18,7 +18,7 @@ export default function Login() {
   const router = useRouter();
   const [hide, setHide] = useState<boolean>(true);
   const [showToast, setShowToast] = useState<boolean>(false);
-  const [status, setStatus] = useState<number>();
+  const [status, setStatus] = useState<SignInResponse>();
   const { register, handleSubmit } = useForm<ILogin>();
 
   const handleLogin: SubmitHandler<ILogin> = async data => {
@@ -28,16 +28,16 @@ export default function Login() {
       password: data.password,
     });
 
-    setStatus(res?.status);
+    setStatus(res);
   };
 
   useEffect(() => {
-    if (status === 200) {
+    if (status?.status === 200) {
       setShowToast(true);
       setTimeout(() => {
         router.push("/dashboard");
       }, 3000);
-    } else if ((status as number) >= 400) {
+    } else if (status?.status as number >= 400) {
       setShowToast(true);
     }
   }, [status, router]);
@@ -160,11 +160,11 @@ export default function Login() {
       </div>
       {showToast && (
         <Toast
-          status={status === 200 ? "success" : "error"}
+          status={status?.status === 200 ? "success" : "error"}
           message={
-            status === 200
+            status?.status === 200
               ? "Login Successful!"
-              : "Login Error Please Check Your Credential"
+              : status?.error || "Login Error Please Check Your Credential"
           }
           onClose={() => setShowToast(false)}
         />
