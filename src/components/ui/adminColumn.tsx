@@ -6,7 +6,7 @@ export const AdminTableColumn = (transaction : TableColumnProps) => {
       <tr>
         <td className="px-6 py-4">{email || "N/A"}</td>
         <td className="px-6 py-4">{new Date(transaction_date).toLocaleDateString()}</td>
-        <td className="px-6 py-4">{amount}</td>
+        <td className="px-6 py-4">{amount} Zenq</td>
         <td className="px-6 py-4">
         <span
           style={

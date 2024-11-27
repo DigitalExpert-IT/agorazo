@@ -15,7 +15,7 @@ export const LayoutMain: React.FC<LayoutMainProps> = ({ children }) => {
 
   return (
     <>
-      <div className={`page-wrapper  ${toggle ? "toggled" : ""}`}>
+      <div className={`page-wrapper  ${toggle ? "toggled" : ""} min-h-lvh`}>
         <Navbar />
         <main className="page-content bg-gray-50 dark:bg-slate-800">
           <TopNav
