@@ -3,7 +3,7 @@ import { Html, Head, Main, NextScript } from "next/document";
 export default function Document() {
   return (
     <Html lang="en">
-      <title>Zenq</title>
+      <title>ZENQ</title>
       <Head />
       <body className="antialiased">
         <Main />

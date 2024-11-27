@@ -40,7 +40,7 @@ export default NextAuth({
         const token = jwt.sign(
           { userId: user.id, email: user.email, role: user.role },
           JWT_SECRET,
-          { expiresIn: '12h' }
+          { expiresIn: '1h' }
         );
 
         return {
@@ -60,7 +60,7 @@ export default NextAuth({
         //@ts-expect-error "the type of User at jwt not included token"
         token.jwt = user.token;
         token.email = user.email;
-         //@ts-expect-error "the type of User at jwt not included token"
+        //@ts-expect-error "the type of User at jwt not included token"
         token.role = user.role;
       }
       return token;

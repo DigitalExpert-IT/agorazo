@@ -1,12 +1,12 @@
 import { TableColumnProps } from "./tableColumn";
 
-export const UserTableColumn = (transaction : TableColumnProps ) => {
-    const { reference, transaction_date, amount, status } = transaction;
-    return (
-      <tr>
-        <td className="px-6 py-4 dark:text-white">{new Date(transaction_date).toLocaleDateString()}</td>
-        <td className="px-6 py-4 dark:text-white">{amount} Zenq</td>
-        <td className="px-6 py-4">
+export const UserTableColumn = (transaction: TableColumnProps) => {
+  const { reference, transaction_date, amount, status } = transaction;
+  return (
+    <tr>
+      <td className="px-6 py-4 dark:text-white">{new Date(transaction_date).toLocaleDateString()}</td>
+      <td className="px-6 py-4 dark:text-white">{amount} Zenq</td>
+      <td className="px-6 py-4">
         <span
           style={
             status === "verified"
@@ -25,9 +25,9 @@ export const UserTableColumn = (transaction : TableColumnProps ) => {
           rel="noopener noreferrer"
           className="text-sm text-blue-600 hover:underline"
         >
-          {status === "verified" ? reference.slice(0,20)+"..." : "-"}
+          {status === "verified" ? reference.slice(0, 20) + "..." : "-"}
         </a>
       </td>
-      </tr>
-    );
-  };
+    </tr>
+  );
+}
