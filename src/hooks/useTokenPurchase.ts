@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 
 interface TransactionStatusHook {
   tokenPrice: number | null;
@@ -11,7 +10,6 @@ interface TransactionStatusHook {
 }
 
 export const useTokenPurchase = (): TransactionStatusHook => {
-  const router = useRouter();
   const [tokenPrice, setTokenPrice] = useState<number | null>(null);
   const [prevPrice, setPrevPrice] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -52,7 +50,7 @@ export const useTokenPurchase = (): TransactionStatusHook => {
   const handleBuy = async (amount: number) => {
     if (!amount || amount <= 0 || !tokenPrice) return;
 
-    if (amount < 0.2) {
+    if (amount <= 0.01) {
       setBuyError(`The amount must be at least 0.2 USDT.`);
       return;
     }
@@ -76,17 +74,7 @@ export const useTokenPurchase = (): TransactionStatusHook => {
 
       const paymentData = await response.json();
 
-      router.push({
-        pathname: '/payment-information',
-        query: {
-          qrCode: paymentData.qrCode,
-          timeout: paymentData.timeout,
-          amount: paymentData.amount,
-          address: paymentData.address,
-          status: paymentData.status,
-          email: paymentData.email
-        }
-      });
+      window.open(paymentData.status, "_blank");
 
     } catch (err) {
       console.error("Error during purchase:", err);

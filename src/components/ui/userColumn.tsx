@@ -25,7 +25,7 @@ export const UserTableColumn = (transaction: TableColumnProps) => {
           rel="noopener noreferrer"
           className="text-sm text-blue-600 hover:underline"
         >
-          {status === "verified" ? reference.slice(0, 20) + "..." : "-"}
+          {reference}
         </a>
       </td>
     </tr>

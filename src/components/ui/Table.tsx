@@ -9,7 +9,7 @@ export const Table = () => {
     useTransactions();
 
   return (
-    <div className="w-full container mx-auto p-4">
+    <div className="w-full container m-auto p-4">
       <div className="mx-auto px-4 sm:px-6">
         <div className="flex flex-row gap-5 justify-end ps-1.5 my-4">
           <div className="form-icon relative sm:block">
@@ -48,17 +48,17 @@ export const Table = () => {
                   Date
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Asset
+                  Zenq Asset
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Hash Transaction
+                  reference
                 </th>
                 <th style={sessionData?.user.role === "admin"
-                      ? { display: "block" }
-                      : { display: "none" }
+                  ? { display: "block" }
+                  : { display: "none" }
                 } className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Action
                 </th>

@@ -44,7 +44,6 @@ export default async function handler(
 
   const session = await getToken({ req });
 
-  // Check if user is authenticated
   if (!session?.email) {
     return res.status(401).json({ error: "Unauthorized: Please log in first" });
   }
@@ -85,7 +84,7 @@ export default async function handler(
         valueToken,
         type: "DEPOSIT",
         status: "PENDING",
-        reference: transaction.status_url,
+        reference: transaction.txn_id,
       },
     });
 

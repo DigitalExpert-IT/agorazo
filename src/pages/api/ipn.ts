@@ -14,31 +14,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const ipnData = req.body;
-
   const hmac = req.headers["hmac"] as string;
-  const calculatedHmac = crypto
-    .createHmac("sha512", COINPAYMENTS_IPN_SECRET as string)
-    .update(new URLSearchParams(ipnData).toString())
-    .digest("hex");
 
-  if (hmac !== calculatedHmac) {
-    return res.status(403).json({ error: "Invalid IPN signature" });
+  if (!hmac) {
+    console.error("Missing HMAC header");
+    return res.status(400).json({ error: "Missing HMAC header" });
   }
 
-  const transactionId = ipnData.txn_id;
-  const status = parseInt(ipnData.status, 10);
-
   try {
+    const calculatedHmac = crypto
+      .createHmac("sha512", COINPAYMENTS_IPN_SECRET as string)
+      .update(new URLSearchParams(ipnData).toString())
+      .digest("hex");
+
+    if (hmac !== calculatedHmac) {
+      console.error("Invalid IPN signature");
+      return res.status(403).json({ error: "Invalid IPN signature" });
+    }
+
+    const transactionId = ipnData.txn_id;
+    const status = parseInt(ipnData.status, 10);
+
+    console.info("Processing IPN for transaction:", transactionId, "Status:", status);
+
+    let newStatus = "PENDING";
     if (status >= 100) {
-      await prisma.transaction.updateMany({
-        where: { reference: transactionId, status: "PENDING" },
-        data: { status: "SUCCESS" },
-      });
+      newStatus = "SUCCESS";
     } else if (status < 0) {
-      await prisma.transaction.updateMany({
-        where: { reference: transactionId, status: "PENDING" },
-        data: { status: "FAILED" },
-      });
+      newStatus = "FAILED";
+    }
+
+    const updated = await prisma.transaction.updateMany({
+      where: { reference: transactionId, status: "PENDING" },
+      data: { status: newStatus },
+    });
+
+    if (updated.count === 0) {
+      console.warn("No matching transactions found for IPN");
     }
 
     res.status(200).json({ message: "IPN processed successfully" });

@@ -20,23 +20,22 @@ export const TableColumn: React.FC<TableColumnProps> = ({
   userRole,
 }) => {
   return (
-      <WithRole allowedRoles={["admin"]} userRole={userRole} 
-        fallback={
-          <UserTableColumn 
-            userRole={userRole} 
-            transaction_date={transaction_date} 
-            amount={amount} status={status} 
-            reference={reference} 
-            email={email}
-          />
-        }>
-          <AdminTableColumn 
-            userRole={userRole} 
-            transaction_date={transaction_date} 
-            amount={amount} status={status} 
-            reference={reference} 
-            email={email} />
-      </WithRole>
-
+    <WithRole allowedRoles={["admin"]} userRole={userRole}
+      fallback={
+        <UserTableColumn
+          userRole={userRole}
+          transaction_date={transaction_date}
+          amount={amount} status={status}
+          reference={reference}
+          email={email}
+        />
+      }>
+      <AdminTableColumn
+        userRole={userRole}
+        transaction_date={transaction_date}
+        amount={amount} status={status}
+        reference={reference}
+        email={email} />
+    </WithRole>
   );
 };
