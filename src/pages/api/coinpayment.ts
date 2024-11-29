@@ -9,6 +9,7 @@ type RequestBody = {
 };
 
 type TransactionResponse = {
+  txnId: string;
   qrCode: string;
   timeout: number;
   amount: string;
@@ -80,15 +81,17 @@ export default async function handler(
     await prisma.transaction.create({
       data: {
         userId: user.id,
+        txnId: transaction.txn_id,
         value: amount,
         valueToken,
         type: "DEPOSIT",
         status: "PENDING",
-        reference: transaction.txn_id,
+        reference: transaction.status_url,
       },
     });
 
     return res.status(200).json({
+      txnId: transaction.txn_id,
       qrCode: transaction.qrcode_url,
       timeout: transaction.timeout,
       amount: transaction.amount,

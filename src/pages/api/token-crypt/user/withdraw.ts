@@ -22,6 +22,7 @@ export default async function handler(
         data: {
           // @ts-expect-error"Should check id user available"
           userId: session?.user?.id as string,
+          txnId: "",
           value: amount,
           type: "withdraw",
           status: "pending",

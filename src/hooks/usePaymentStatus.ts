@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
 export const usePaymentStatus = (txnId: string) => {
-  const [status, setStatus] = useState<string | null>(null);
+  const [statusText, setStatusText] = useState<string | null>(null);
+  const [signal, setSignal] = useState(0)
+
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -14,7 +16,9 @@ export const usePaymentStatus = (txnId: string) => {
           throw new Error("Failed to fetch payment status");
         }
         const data = await response.json();
-        setStatus(data.status_text);
+
+        setSignal(data.status);
+        setStatusText(data.status_text);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Failed to fetch payment status"
@@ -25,10 +29,10 @@ export const usePaymentStatus = (txnId: string) => {
 
     // Poll every 30 seconds
     fetchStatus();
-    const interval = setInterval(fetchStatus, 30000);
+    const interval = setInterval(fetchStatus, 600000);
 
     return () => clearInterval(interval);
   }, [txnId]);
 
-  return { status, error };
+  return { statusText, error, signal };
 };

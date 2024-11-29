@@ -3,6 +3,7 @@ import { UseRegister } from "./useAuth";
 
 interface Transaction {
   id: string;
+  txnId: string;
   userId: string;
   value: number;
   valueToken: number;

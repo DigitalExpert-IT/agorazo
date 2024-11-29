@@ -92,8 +92,14 @@ export const BalanceInfo = () => {
                 type="number"
                 placeholder="Enter amount in USDT"
                 value={amount}
-                onChange={e => setAmount(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  if (inputValue === "" || /^\d*\.?\d*$/.test(inputValue)) {
+                    setAmount(inputValue);
+                  }
+                }}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white  [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:m-0 [&]:[-moz-appearance:textfield] [&]:appearance-textfield"
+
               />
               {buyError && <div className="text-sm text-red-500 mt-1">
                 {buyError}
