@@ -64,9 +64,9 @@ export const TopNav: React.FC<TopNavProps> = ({ toggleStat, auth, logOut }) => {
           <li className="dropdown inline-block relative">
             <Avatar onClick={() => setIsOpen(!isOpen)} className="hover:cursor-pointer">
               <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>{auth.user.name}</AvatarFallback>
+              <AvatarFallback>{auth?.user.name || ""}</AvatarFallback>
             </Avatar>
-            <ProfileNavbar logOut={() => logOut()} onOpen={isOpen} user={auth?.user} token={auth?.token} expires={auth?.expires} />
+            <ProfileNavbar logOut={() => logOut()} onOpen={isOpen} user={auth?.user || ""} token={auth?.token} expires={auth?.expires} />
           </li>
         </ul>
       </div>

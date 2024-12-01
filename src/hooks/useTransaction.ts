@@ -18,6 +18,7 @@ interface Transaction {
 
 interface UseTransactionsResult {
   transactions: Transaction[] | null;
+  totalAssets: number;
   transaction: Transaction | null;
   loading: boolean;
   error: string | null;
@@ -35,6 +36,7 @@ export const useTransactions = (): UseTransactionsResult => {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalAssets, setTotalAssets] = useState<number>(0)
   const { sessionData } = UseRegister();
 
   const fetchTransactions = useCallback(async () => {
@@ -58,10 +60,16 @@ export const useTransactions = (): UseTransactionsResult => {
       }
 
       const { transactions, totalPages, currentPage: current } = await response.json();
+      let totalAsset = 0
+
+      for(let i = 0; i < transactions?.length; i++){
+        totalAsset += transactions?.value
+      }
 
       setTransactions(transactions);
       setTotalPages(totalPages);
       setCurrentPage(current);
+      setTotalAssets(totalAsset)
     } catch (err) {
       setError(err + "Failed to fetch transactions");
     } finally {
@@ -107,6 +115,7 @@ export const useTransactions = (): UseTransactionsResult => {
 
   return {
     transactions,
+    totalAssets,
     transaction,
     loading,
     error,

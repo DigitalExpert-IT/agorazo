@@ -176,7 +176,7 @@ export default function Signup() {
                     htmlFor="AcceptT&C"
                   >
                     I Accept{" "}
-                    <Link href="/" className="text-violet-600">
+                    <Link href="https://zenqira.com/terms" className="text-violet-600">
                       Terms And Condition
                     </Link>
                   </label>

@@ -3,8 +3,10 @@ import { useState } from "react";
 import { Airplay } from "lucide-react";
 import SimpleBarReact from "simplebar-react";
 import Image from "next/image";
+import { UseRegister } from "hooks";
 
 export const Navbar = () => {
+  const { sessionData } = UseRegister();
   const [manu] = useState("");
 
   return (
@@ -34,10 +36,25 @@ export const Navbar = () => {
             data-simplebar
             style={{ height: "calc(100% - 70px)" }}
           >
-            <li className={["", "index"].includes(manu) ? "active" : ""}>
-              <Link href="/index">
+            {sessionData?.user.role === "admin" ? 
+              <li className={["", "index"].includes(manu) ? "active" : ""}>
+                <Link href="/dashboard">
+                  <Airplay className="size-4 me-3" />
+                  Dashboard
+                </Link>
+              </li>
+            :
+              <li className={["", "index"].includes(manu) ? "active" : ""}>
+              <Link href="/dashboard">
                 <Airplay className="size-4 me-3" />
                 Dashboard
+              </Link>
+            </li>
+            }
+            <li className={["", "index"].includes(manu) ? "active" : ""}>
+              <Link href="/withdraw">
+                <Airplay className="size-4 me-3" />
+                Withdraw
               </Link>
             </li>
           </ul>

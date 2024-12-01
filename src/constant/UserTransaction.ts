@@ -4,6 +4,7 @@ export interface IUserTransaction {
   amount: number;
   status: string;
   reference: string;
+  action?: () => void;
 }
 
 export const USER_TRANSACTION = () => {

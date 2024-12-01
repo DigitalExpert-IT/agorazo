@@ -1,12 +1,13 @@
-import { BalanceInfo, TableUser } from "components";
+import { UserWithdraw } from "components";
 import { LayoutMain } from "components/layout";
+import WithdrawForm from "components/WithdrawForm";
 
 const Dashboard = () => {
 
   return (
     <LayoutMain>
-      <BalanceInfo />
-      <TableUser />
+        <WithdrawForm/>
+        <UserWithdraw />
     </LayoutMain>
   );
 }

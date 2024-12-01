@@ -1,4 +1,4 @@
-import { TableColumnProps } from "./tableColumn";
+import { TableColumnProps } from "types";
 
 export const AdminTableColumn = (transaction : TableColumnProps) => {
     const { email, reference, transaction_date, amount, status } = transaction;
