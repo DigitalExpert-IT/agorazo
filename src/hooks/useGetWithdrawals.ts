@@ -1,13 +1,12 @@
-// hooks/useGetWithdrawals.ts
 import { useState, useEffect } from 'react';
-import { getSession } from 'next-auth/react'; // to get session info if you're using next-auth
+import { getSession } from 'next-auth/react';
 
-interface Withdraw {
+export interface Withdraw {
   id: string;
   userId: string;
   amount: number;
   status: string;
-  createdAt: string;
+  updatedAt: string;
 }
 
 interface Pagination {
@@ -58,7 +57,7 @@ export const useGetWithdrawals = (page: number = 1, limit: number = 10): UseGetW
 
         const data = await response.json();
 
-        setWithdrawals(data.withdrawals);
+        setWithdrawals(data.withdraws);
         setPagination({
           totalPages: data.totalPages,
           currentPage: data.currentPage,

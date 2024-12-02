@@ -74,20 +74,20 @@ export default async function handler(
         });
     
         if (!session) {
-          return res.status(401).json({ message: 'Unauthorized' });
+          return res.status(401).json({ message: "Unauthorized" });
         }
-    
+  
         const { id, role } = user as { id: string; role: string };
-    
+  
         const { page = 1, limit = 10 } = req.query;
         const pageNumber = parseInt(page as string, 10);
         const pageLimit = parseInt(limit as string, 10);
-    
-        const whereClause = role === 'admin' ? {} : { id };
-    
+  
+        const whereClause = role === "admin" ? {} : { userId: id };
+  
         const totalRecords = await prisma.withdraw.count({ where: whereClause });
         const totalPages = Math.ceil(totalRecords / pageLimit);
-    
+  
         const withdraws = await prisma.withdraw.findMany({
           where: whereClause,
           include: {
@@ -100,15 +100,16 @@ export default async function handler(
           skip: (pageNumber - 1) * pageLimit,
           take: pageLimit,
           orderBy: {
-            createdAt: 'desc',
+            createdAt: "desc",
           },
         });
-    
+  
         return res.status(200).json({
           withdraws,
           totalPages,
           currentPage: pageNumber,
         });
+
       } catch (error) {
         console.error('Error fetching withdraw history:', error);
         return res.status(500).json({ message: 'Internal Server Error' });
