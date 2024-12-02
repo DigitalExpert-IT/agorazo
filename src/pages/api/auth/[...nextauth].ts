@@ -26,16 +26,21 @@ export default NextAuth({
           throw new Error("User not found");
         }
 
+        // Check if email is verified
+        if (!user.emailVerified) {
+          throw new Error("Email is not verified. Please verify your email to log in.");
+        }
+
         const isPasswordValid = await bcrypt.compare(password as string, user.password!);
         if (!isPasswordValid) {
           throw new Error("Invalid password");
         }
 
-        // JWT token generate
+        // JWT token generation
         const token = jwt.sign(
           { userId: user.id, email: user.email, role: user.role },
           JWT_SECRET,
-          { expiresIn: '12h' }
+          { expiresIn: '1h' }
         );
 
         return {
@@ -55,6 +60,8 @@ export default NextAuth({
         //@ts-expect-error "the type of User at jwt not included token"
         token.jwt = user.token;
         token.email = user.email;
+        //@ts-expect-error "the type of User at jwt not included token"
+        token.role = user.role;
       }
       return token;
     },
@@ -67,6 +74,8 @@ export default NextAuth({
         session.user.email = token.email;
         //@ts-expect-error "the type of User at jwt not included email"
         session.user.id = token.userId;
+        //@ts-expect-error "the type of User at jwt not included email"
+        session.user.role = token.role
       }
       return session;
     },

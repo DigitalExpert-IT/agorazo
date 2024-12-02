@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { QrCode, CreditCard, Link } from 'lucide-react';
+import { QrCode, CreditCard, Link, Mail } from 'lucide-react';
 
 interface PaymentInfo {
   qrCode: string;
@@ -9,6 +9,7 @@ interface PaymentInfo {
   amount: number;
   address: string;
   status: string;
+  email?: string;
 }
 
 const PaymentInformationPage: React.FC = () => {
@@ -24,6 +25,7 @@ const PaymentInformationPage: React.FC = () => {
     const amount = safeExtractParam(router.query.amount);
     const address = safeExtractParam(router.query.address);
     const status = safeExtractParam(router.query.status);
+    const email = safeExtractParam(router.query.email);
 
     if (!qrCode || !timeout || !amount || !address || !status) {
       return null;
@@ -34,7 +36,8 @@ const PaymentInformationPage: React.FC = () => {
       timeout: parseInt(timeout, 10),
       amount: parseFloat(amount),
       address,
-      status
+      status,
+      email
     };
   }, [router.query]);
 
@@ -97,6 +100,12 @@ const PaymentInformationPage: React.FC = () => {
               <QrCode className="mr-3 text-green-500" size={24} />
               <span>
                 <strong>Address:</strong> {truncateAddress(paymentInfo.address)}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <Mail className="mr-3 text-green-500" size={24} />
+              <span>
+                <strong>email:</strong> {paymentInfo.email}
               </span>
             </div>
             

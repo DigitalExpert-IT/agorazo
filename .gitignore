@@ -41,5 +41,6 @@ yarn-error.log*
 next-env.d.ts
 
 # Prisma generated files
-/prisma/agorazo.db
 /prisma/migrations/
+/prisma/agorazo.db
+/prisma/agorazo.db-journal

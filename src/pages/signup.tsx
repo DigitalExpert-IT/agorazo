@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { AuthLayout } from "../components/layout/AuthLayout";
-import Icon from "feather-icons-react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import Image from "next/image";
 import { UseRegister } from "hooks";
 import { Toast } from "components/ui";
 import { useRouter } from "next/router";
-import Image from "next/image";
+import { Eye, EyeClosed } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { AuthLayout } from "../components/layout/AuthLayout";
 
 interface IRegister {
   name: string;
@@ -146,13 +146,11 @@ export default function Signup() {
                       aria-label="Toggle password visibility"
                     >
                       {hide ? (
-                        <Icon
-                          icon="eye-off"
+                        <EyeClosed
                           className="text-gray-500 dark:text-slate-400"
                         />
                       ) : (
-                        <Icon
-                          icon="eye"
+                        <Eye
                           className="text-gray-500 dark:text-slate-400"
                         />
                       )}

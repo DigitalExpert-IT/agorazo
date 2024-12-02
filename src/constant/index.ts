@@ -1,1 +1,1 @@
-export * from "./mockup-data";
+export * from "./UserTransaction"

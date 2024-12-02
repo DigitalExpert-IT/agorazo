@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Icon from "feather-icons-react";
+import { ArrowLeft } from "lucide-react";
 
 interface IAuthWrapper {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export const AuthLayout = ({ children }: IAuthWrapper) => {
           href="/login"
           className="back-button btn btn-icon bg-violet-600 hover:bg-violet-700 border-violet-600 hover:border-violet-700 text-white rounded-full"
         >
-          <Icon icon="arrow-left" className="size-4" />
+          <ArrowLeft className="size-4" />
         </Link>
       </div>
     </div>

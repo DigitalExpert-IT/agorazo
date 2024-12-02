@@ -1,81 +1,14 @@
 import Image from "next/image";
-import {Tooltip} from "react-tooltip";
+import { Tooltip } from "react-tooltip";
+import React, { useState } from "react";
+import { useTokenPurchase } from "hooks";
 import { useSession } from "next-auth/react";
-import React, { useState, useEffect } from "react";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
-import { useRouter } from "next/router";
 
 export const BalanceInfo = () => {
-  const router = useRouter();
-  const [amount, setAmount] = useState("");
   const { data: session } = useSession();
-  const [tokenPrice, setTokenPrice] = useState<number | null>(null);
-  const [prevPrice, setPrevPrice] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchTokenPrice = async () => {
-      try {
-        const response = await fetch("/api/binance");
-        if (!response.ok) {
-          throw new Error("Failed to fetch token price");
-        }
-        const data = await response.json();
-
-        if (data.stats && data.stats.length > 0) {
-          const currentPrice = data.stats[data.stats.length - 1][1];
-          const perviousePrice = data.stats[data.stats.length - 2][1];
-          setTokenPrice(currentPrice);
-          setPrevPrice(perviousePrice);
-        }
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch price data"
-        );
-        console.error("Error fetching price:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTokenPrice();
-    const interval = setInterval(fetchTokenPrice, 60000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleBuy = async (amount: number) => {
-    if (!amount || !tokenPrice) return;
-
-    try {
-      console.log(amount)
-      const response = await fetch("/api/coinpayment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Transaction failed');
-      }
-      const paymentData = await response.json();
-      router.push({
-        pathname: '/payment-information',
-        query: {
-          qrCode: paymentData.qrCode,
-          timeout: paymentData.timeout,
-          amount: paymentData.amount,
-          address: paymentData.address,
-          status: paymentData.status
-        }
-      })
-      
-    } catch (err) {
-      console.error("Error during purchase:", err);
-    }
-  };
+  const [amount, setAmount] = useState("");
+  const { tokenPrice, handleBuy, error, prevPrice, isLoading, buyError } = useTokenPurchase()
 
   const priceChange =
     tokenPrice !== null && prevPrice !== null ? tokenPrice - prevPrice : null;
@@ -93,7 +26,6 @@ export const BalanceInfo = () => {
   return (
     <div className="container mx-auto p-4 mt-20">
       <div className="grid gap-4 md:grid-cols-3">
-        {/* Balance Information*/}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-6 text-black dark:text-white">
             Balance Information
@@ -109,9 +41,8 @@ export const BalanceInfo = () => {
               <>
                 <div className="flex items-center justify-between">
                   <p
-                    className={`text-3xl font-bold ${
-                      priceChange! >= 0 ? "text-green-500" : "text-red-500"
-                    } `}
+                    className={`text-3xl font-bold ${priceChange! >= 0 ? "text-green-500" : "text-red-500"
+                      } `}
                   >
                     {formatPrice(tokenPrice)}
                   </p>
@@ -153,7 +84,7 @@ export const BalanceInfo = () => {
         {/* Purchase Box */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 md:col-span-2">
           <h2 className="text-xl font-semibold mb-4 dark:text-white">
-            Make a Purchase
+            Make a Purchase using USDT
           </h2>
           <div className="space-y-4">
             <div className="relative">
@@ -161,9 +92,18 @@ export const BalanceInfo = () => {
                 type="number"
                 placeholder="Enter amount in USDT"
                 value={amount}
-                onChange={e => setAmount(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  if (inputValue === "" || /^\d*\.?\d*$/.test(inputValue)) {
+                    setAmount(inputValue);
+                  }
+                }}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white  [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:m-0 [&]:[-moz-appearance:textfield] [&]:appearance-textfield"
+
               />
+              {buyError && <div className="text-sm text-red-500 mt-1">
+                {buyError}
+              </div>}
               {tokenPrice && amount && (
                 <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   ≈ {(Number(amount) / tokenPrice).toFixed(6)} ZENQ
@@ -174,7 +114,7 @@ export const BalanceInfo = () => {
               <button
                 onClick={() => handleBuy(Number(amount))}
                 disabled={!amount || isLoading || !!error || session == null}
-                data-tip 
+                data-tip
                 data-tooltip-content={session == null ? "Please Login First!" : ""}
                 data-tooltip-id="buyTooltip"
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"

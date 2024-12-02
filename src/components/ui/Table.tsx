@@ -1,83 +1,112 @@
-import React, { useState } from "react";
-import { TableColumn } from "./tableColumn";
-import { Users } from "constant";
-import { Search } from "lucide-react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from "react";
+import {
+  useReactTable,
+  flexRender,
+  getCoreRowModel,
+  ColumnDef,
+  SortingState,
+  getSortedRowModel,
+} from "@tanstack/react-table";
 
-export const Table = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isAdmin, setIsAdmin] = useState<boolean>(true)
-  const totalPage = Math.ceil(Users.length/5)
+type TableProps<Data extends object> = {
+  data: Data[];
+  columns: ColumnDef<Data, any>[];
+  columnCustom?: React.HTMLAttributes<HTMLTableCellElement>;
+};
 
+export const Table = <Data extends object>({
+  data,
+  columns,
+  columnCustom,
+}: TableProps<Data>) => {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  const table = useReactTable({
+    columns,
+    data,
+    getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
+  });
 
   return (
-    <div className="w-full">
-      <div className="mx-auto px-4 sm:px-6">
-        <div className="flex flex-row gap-5 justify-end ps-1.5 my-4">
-            <div className="form-icon relative sm:block">
-              <Search className="absolute top-4 -translate-y-1/2 start-3 text-black dark:text-white" />
-              <input
-                type="text"
-                className="form-input min-h-10 w-56 ps-9 py-2 px-3 h-8 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded-md outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 bg-white text-black shadow-md"
-                name="s"
-                id="searchItem"
-                placeholder="Search..."
-              />
-            </div>
-            {isAdmin ?
-            <div>
-              <button
-                className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
-                  Withdraw All
-              </button>
-            </div>
-            : null }
-        </div>
-        <div className="overflow-x-auto shadow-md rounded-lg">
-          <table className="w-full table-auto">
-            <thead className="dark:bg-gray-700 bg-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  User
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Asset Amount
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Join Since
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Action
-                </th>
+    <div className="w-full bg-white shadow-lg rounded-xl overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header, index) => {
+                  const meta: any = header.column.columnDef.meta;
+                  return (
+                    <th
+                      key={header.id}
+                      className={`
+                        px-6 py-4 
+                        text-center 
+                        uppercase 
+                        font-semibold 
+                        tracking-wider
+                        ${index === 0 ? 'rounded-tl-xl' : ''}
+                        ${index === headerGroup.headers.length - 1 ? 'rounded-tr-xl' : ''}
+                        ${meta?.isNumeric ? 'text-right' : ''}
+                      `}
+                      {...columnCustom}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                    </th>
+                  );
+                })}
               </tr>
-            </thead>
-            <tbody className="dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {Users.slice(0,5).map((item, idx) => (
-                <TableColumn key={idx} profile_email={item.profile_email} profile_name={item.profile_name} amount={item.amount} member_since={item.member_since}/>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="flex justify-end mt-5">
-              <div className="flex flex-row gap-2">
-                <button
-                  className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
-                    Prev
-                </button>
-                {Array.from({ length: totalPage }, (_, idx) => (
-                  <button
-                    className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-                    key={idx}
-                  >
-                    {idx + 1}
-                  </button>
-                ))}
-                <button
-                  className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
-                    Next
-                </button>
-              </div>
-            </div>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row, index) => (
+              <tr
+                key={row.id}
+                className={`
+                  border-b border-gray-200 
+                  transition-all duration-300 
+                  hover:bg-blue-50
+                  ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}
+                `}
+              >
+                {row.getVisibleCells().map(cell => {
+                  const meta: any = cell.column.columnDef.meta;
+                  return (
+                    <td
+                      key={cell.id}
+                      className={`
+                        px-6 py-4 
+                        ${meta?.isNumeric ? 'text-right' : 'text-left'}
+                        text-gray-700
+                        font-medium
+                      `}
+                      {...columnCustom}
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+      {data.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          No data available
+        </div>
+      )}
     </div>
   );
 };
+
+export default Table;

@@ -111,11 +111,15 @@ model Authenticator {
 }
 
 model Transaction {
-  id     String @id @default(cuid())
-  userId String
-  value  Int
-  type   String
-  status String
+  id                  String @id @default(cuid())
+  userId              String
+  txnId               String
+  value               Int
+  valueToken          Float
+  type                String
+  status              String
+  reference           String
+  createdAt           DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
 }
