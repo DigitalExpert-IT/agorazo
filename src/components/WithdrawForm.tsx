@@ -1,6 +1,7 @@
 import Image from "next/image";
+import { Toast } from "./ui";
 import { Tooltip } from "react-tooltip";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePostWithdrawal, useTokenPurchase, useTransactions } from "hooks";
 import { useSession } from "next-auth/react";
 import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
@@ -8,9 +9,11 @@ import { ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 const WithdrawForm = () => {
   const { data: session } = useSession();
   const [amount, setAmount] = useState("");
-  const { tokenPrice, error, prevPrice, isLoading } = useTokenPurchase()
-  const { loading, error: postError, postWithdrawal } = usePostWithdrawal()
-  const {totalAssets} = useTransactions();
+  const { tokenPrice, error, prevPrice, isLoading } = useTokenPurchase();
+  const { loading, error: postError, postWithdrawal, success } = usePostWithdrawal();
+  const { totalAssets } = useTransactions();
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string>("");
 
   const priceChange =
     tokenPrice !== null && prevPrice !== null ? tokenPrice - prevPrice : null;
@@ -24,6 +27,18 @@ const WithdrawForm = () => {
       maximumFractionDigits: 6,
     }).format(price);
   };
+
+  useEffect(() => {
+    if (success) {
+      setToastMessage("Withdraw Requested!");
+      setShowToast(true);
+      setAmount("")
+    } else if (postError) {
+      setToastMessage(postError || "Error occurred");
+      setShowToast(true);
+      setAmount("")
+    }
+  }, [success, postError]);
 
   return (
     <div className="container mx-auto p-4 mt-20">
@@ -43,8 +58,7 @@ const WithdrawForm = () => {
               <>
                 <div className="flex items-center justify-between">
                   <p
-                    className={`text-3xl font-bold ${priceChange! >= 0 ? "text-green-500" : "text-red-500"
-                      } `}
+                    className={`text-3xl font-bold ${priceChange! >= 0 ? "text-green-500" : "text-red-500"}`}
                   >
                     {formatPrice(tokenPrice)}
                   </p>
@@ -57,9 +71,7 @@ const WithdrawForm = () => {
                   ) : null}
                 </div>
 
-                <p className="text-gray-600 dark:text-gray-400">
-                  ZENQ Token Price
-                </p>
+                <p className="text-gray-600 dark:text-gray-400">ZENQ Token Price</p>
               </>
             )}
           </div>
@@ -101,11 +113,8 @@ const WithdrawForm = () => {
                   }
                 }}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white  [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:m-0 [&]:[-moz-appearance:textfield] [&]:appearance-textfield"
-
               />
-              {postError && <div className="text-sm text-red-500 mt-1">
-                {postError}
-              </div>}
+              {postError && <div className="text-sm text-red-500 mt-1">{postError}</div>}
               {tokenPrice && amount && (
                 <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   ≈ {(Number(amount) * tokenPrice).toFixed(6)} USDT
@@ -128,6 +137,13 @@ const WithdrawForm = () => {
           </div>
         </div>
       </div>
+      {showToast && (
+        <Toast
+          status={success ? "success" : "error"}
+          message={toastMessage}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </div>
   );
 };

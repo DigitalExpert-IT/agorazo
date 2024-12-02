@@ -8,31 +8,37 @@ export default async function handler(
 ) {
   try {
     const session = await getToken({ req });
-    const { userId, role } = session as { userId: string; role: string };
+    const user = await prisma.user.findUnique({
+      where: { email: session?.email || undefined }
+    });
+    const { id, role } = user as {id: string, role: string}
 
     if (!session) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
     if (req.method === 'POST') {
-      const { amount } = req.body;
-
-      if (!amount || amount <= 0) {
-        return res.status(400).json({ error: 'Invalid amount' });
+      try {
+        const { amount } = req.body;
+        if (!amount || amount <= 0) {
+          return res.status(400).json({ error: 'Invalid amount' });
+        }
+    
+        const withdraw = await prisma.withdraw.create({
+          data: {
+            userId: id,
+            amount,
+            status: 'Pending',
+          },
+        });
+    
+        return res.status(201).json(withdraw);
+      } catch (err) {
+        console.error('Error creating withdrawal:', err);
+        return res.status(500).json({ error: 'Failed to create withdrawal' });
       }
-
-      const withdraw = await prisma.withdraw.create({
-        data: {
-          amount,
-          status: 'Pending',
-          user: {
-            connect: {id: userId}
-          }
-        },
-      });
-
-      return res.status(201).json(withdraw);
     }
+    
 
     if (req.method === 'PUT') {
       const { withdrawId, status, eventLog } = req.body;
@@ -57,7 +63,60 @@ export default async function handler(
       return res.status(200).json(updatedWithdraw);
     }
 
-    res.setHeader('Allow', ['POST', 'PUT']);
+    if (req.method === 'GET') {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    
+      try {
+        const user = await prisma.user.findUnique({
+          where: { email: session?.email || undefined },
+        });
+    
+        if (!session) {
+          return res.status(401).json({ message: 'Unauthorized' });
+        }
+    
+        const { id, role } = user as { id: string; role: string };
+    
+        const { page = 1, limit = 10 } = req.query;
+        const pageNumber = parseInt(page as string, 10);
+        const pageLimit = parseInt(limit as string, 10);
+    
+        const whereClause = role === 'admin' ? {} : { id };
+    
+        const totalRecords = await prisma.withdraw.count({ where: whereClause });
+        const totalPages = Math.ceil(totalRecords / pageLimit);
+    
+        const withdraws = await prisma.withdraw.findMany({
+          where: whereClause,
+          include: {
+            user: {
+              select: {
+                email: true,
+              },
+            },
+          },
+          skip: (pageNumber - 1) * pageLimit,
+          take: pageLimit,
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+    
+        return res.status(200).json({
+          withdraws,
+          totalPages,
+          currentPage: pageNumber,
+        });
+      } catch (error) {
+        console.error('Error fetching withdraw history:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+      }
+    }
+    
+
+    res.setHeader('Allow', ['POST', 'PUT', 'GET']);
     return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
   } catch (error) {
     console.error('Error handling withdrawal request:', error);

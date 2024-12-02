@@ -3,7 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { Table } from "components/ui";
 import Pagination from "components/Pagination";
 import { IUserTransaction } from "constant";
-import { useTransactions } from "hooks";
+import { useGetWithdrawals } from "hooks";
 import { Badge } from "components/ui/Badge";
 import { usePaymentStatus } from "hooks/usePaymentStatus";
 import Link from "next/link";
@@ -12,7 +12,7 @@ import { Search } from "lucide-react";
 const columnHelper = createColumnHelper<IUserTransaction>();
 
 export const UserWithdraw = () => {
-  const { transactions } = useTransactions();
+  const { withdrawals } = useGetWithdrawals();
 
   const columns = useMemo(() => [
     columnHelper.accessor("transactionDate", {
@@ -59,16 +59,14 @@ export const UserWithdraw = () => {
   ], []);
 
   const DataTableTransaction = useMemo(() => {
-    if (!transactions) return [];
+    if (!withdrawals) return [];
 
-    return transactions.map((item) => ({
-      txnId: item.txnId || "",
-      amount: item.valueToken || 0,
+    return withdrawals.map((item) => ({
+      amount: item.amount || 0,
       status: item.status || '',
-      reference: item.reference || '',
       transactionDate: new Date(item.createdAt).toLocaleDateString() || "",
     }));
-  }, [transactions]);
+  }, [withdrawals]);
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,11 +93,6 @@ export const UserWithdraw = () => {
               placeholder="Search..."
             />
           </div>
-            <div>
-              <button className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
-                Withdraw All
-              </button>
-            </div>
         </div>
       <div>
         <Table
