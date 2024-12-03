@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { UseRegister } from "./useAuth";
+import { getUserBalance } from "utils/balance";
+import { useSession } from "next-auth/react";
 
-interface Transaction {
+export interface Transaction {
   id: string;
   txnId: string;
   userId: string;
@@ -62,8 +64,8 @@ export const useTransactions = (): UseTransactionsResult => {
       const { transactions, totalPages, currentPage: current } = await response.json();
       let totalAsset = 0
 
-      for(let i = 0; i < transactions?.length; i++){
-        totalAsset += transactions?.value
+      for(let i = 0; i < transactions[0]?.length; i++){
+        totalAsset += transactions[0]?.value
       }
 
       setTransactions(transactions);
@@ -123,6 +125,6 @@ export const useTransactions = (): UseTransactionsResult => {
     refetch: fetchTransactions,
     currentPage,
     totalPages,
-    setPage,
+    setPage
   };
 };

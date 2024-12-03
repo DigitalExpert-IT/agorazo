@@ -1,14 +1,14 @@
 export const statuses = [
     {
-        status: "Pending",
+        status: "PENDING",
         color: "#71717a"
     },
     {
-        status: "Verified & Sended",
+        status: "VERIFIED",
         color: "#22c55e"
     },
     {
-        status: "Rejected",
+        status: "REJECTED",
         color: "#ef4444"
     }
 ]

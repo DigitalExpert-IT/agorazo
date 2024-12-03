@@ -9,18 +9,25 @@ export default async function handler(
   if (req.method === "GET") {
     try {
       const session = await getToken({ req });
+    
+      const user = await prisma.user.findUnique({
+        where: { email: session?.email || undefined }
+      });
 
       if (!session) {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
-      const { userId, role } = session as { userId: string; role: string };
+      const { id, role } = user as {id: string, role: string}
 
-      const { page = 1, limit = 10 } = req.query;
+      const { page = 1, limit = 10, type = "DEPOSIT" } = req.query;
       const pageNumber = parseInt(page as string, 10);
       const pageLimit = parseInt(limit as string, 10);
 
-      const whereClause = role === "admin" ? {} : { userId };
+      const whereClause = {
+        ...(role === "admin" ? {} : { userId: id }),
+        type: type as string,
+      };
 
       const totalRecords = await prisma.transaction.count({ where: whereClause });
       const totalPages = Math.ceil(totalRecords / pageLimit);

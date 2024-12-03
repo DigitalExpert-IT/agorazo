@@ -1,19 +1,28 @@
-import {prisma} from "pages/api/prisma";
+import { prisma } from "pages/api/prisma";
 
 export const getUserBalance = async (email: string) => {
   try {
-    const userId = await prisma.user.findUnique({where: { email }});
 
-    if(!userId) throw new Error("User Not Found");
+    const user = await prisma.user.findUnique({ where: { email } });
 
-    // get user transactions to calculate user balance
-    const transactions = await prisma.transaction.findMany({where: userId});
-    return transactions.reduce((acc, tx) => {
-      if(tx.type == "deposit") return acc += tx.value;
-      else return acc -= tx.value;
-    }, 0);
+    if (!user) throw new Error("User not found");
 
-  } catch(error) {
-    return new Error(typeof error == "string" ? error : "Error get user balance");
+    const depositTransactions = await prisma.transaction.findMany({
+      where: {
+        userId: user.id,
+        type: "DEPOSIT", 
+        status: "VERIFIED"
+      },
+    });
+
+    const totalBalance = depositTransactions.reduce((acc, tx) => acc + tx.value, 0);
+
+    return totalBalance;
+
+  } catch (error) {
+    console.error("Error fetching user balance:", error);
+    return new Error(
+      typeof error === "string" ? error : "Error get user balance"
+    );
   }
 };

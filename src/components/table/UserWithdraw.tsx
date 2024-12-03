@@ -2,19 +2,14 @@ import React, { useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Table } from "components/ui";
 import Pagination from "components/Pagination";
+import { IUserTransaction } from "constant";
 import { useGetWithdrawals } from "hooks";
 import { Badge } from "components/ui/Badge";
 import { usePaymentStatus } from "hooks/usePaymentStatus";
-import { Search } from "lucide-react";
+import Link from "next/link";
 import { statuses } from "constant/status";
 
-interface DataTableWithdraw {
-  amount: number;
-  status: string;
-  updatedAt: string;
-}
-
-const columnHelper = createColumnHelper<DataTableWithdraw>();
+const columnHelper = createColumnHelper<IUserTransaction>();
 
 export const UserWithdraw = () => {
   const { withdrawals } = useGetWithdrawals();
@@ -25,7 +20,7 @@ export const UserWithdraw = () => {
   };
 
   const columns = useMemo(() => [
-    columnHelper.accessor("updatedAt", {
+    columnHelper.accessor("transactionDate", {
       cell: info => (
         <div className="min-w-[5rem] font-bold text-sm capitalize text-center">
           {info.getValue()}
@@ -33,13 +28,21 @@ export const UserWithdraw = () => {
       ),
       header: () => <div>Date</div>,
     }),
+    columnHelper.accessor("txnId", {
+      cell: info => (
+        <div className="min-w-[13rem] font-bold text-md capitalize text-center">
+          {info.getValue()}
+        </div>
+      ),
+      header: () => <div className="text-center">txnId</div>,
+    }),
     columnHelper.accessor("amount", {
       cell: info => (
         <div className="min-w-[13rem] font-bold text-md capitalize text-center">
-          {info.getValue() + " ZENQ"}
+          {info.getValue()}
         </div>
       ),
-      header: () => <div className="text-center">ZENQ Requested</div>,
+      header: () => <div className="text-center">ZENQ Asset</div>,
     }),
     columnHelper.accessor("status", {
       cell: info => {
@@ -53,15 +56,27 @@ export const UserWithdraw = () => {
       },
       header: () => <div className="text-center">Status</div>,
     }),
+    columnHelper.accessor("reference", {
+      cell: info => (
+        <Link href={info.row.original.reference}>
+          <div className="min-w-[13rem] font-bold text-md text-center hover:text-blue-700">
+            {info.getValue().slice(0, 20) + "..."}
+          </div>
+        </Link>
+      ),
+      header: () => <div className="text-center">Reference</div>,
+    }),
   ], []);
-  
+
   const DataTableTransaction = useMemo(() => {
     if (!withdrawals) return [];
-  
+
     return withdrawals.map((item) => ({
-      updatedAt: new Date(item.updatedAt).toLocaleDateString() || "",
-      amount: item.amount || 0,
-      status: item.status || "",
+      txnId: item.txnId || "-",
+      amount: item.value || 0,
+      status: item.status || '',
+      reference: item.reference || '',
+      transactionDate: new Date(item.createdAt).toLocaleDateString() || "",
     }));
   }, [withdrawals]);
 
@@ -78,23 +93,12 @@ export const UserWithdraw = () => {
   };
 
   return (
-    <div className="p-5 space-y-4 mt-20">
-       <div className="flex flex-row gap-5 justify-end ps-1.5 my-4">
-          <div className="form-icon relative sm:block">
-            <Search className="absolute top-5 -translate-y-1/2 start-3 text-black dark:text-white" />
-            <input
-              type="text"
-              className="form-input min-h-10 w-56 ps-9 px-3 h-8 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded-md outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 bg-white text-black shadow-md"
-              name="search"
-              id="searchItem"
-              placeholder="Search..."
-            />
-          </div>
-        </div>
+    <div className="p-5 space-y-4">
       <div>
         <Table
           data={currentItems}
           columns={columns}
+
         />
       </div>
 

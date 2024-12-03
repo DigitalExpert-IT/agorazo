@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { prisma } from 'pages/api/prisma';
+import { getUserBalance } from 'utils/balance';
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,29 +9,38 @@ export default async function handler(
 ) {
   try {
     const session = await getToken({ req });
-    const user = await prisma.user.findUnique({
-      where: { email: session?.email || undefined }
-    });
-    const { id, role } = user as {id: string, role: string}
 
     if (!session) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
+    const user = await prisma.user.findUnique({
+      where: { email: session?.email || undefined }
+    });
+
     if (req.method === 'POST') {
+      const { id } = user as {id: string}
       try {
         const { amount } = req.body;
         if (!amount || amount <= 0) {
           return res.status(400).json({ error: 'Invalid amount' });
         }
     
-        const withdraw = await prisma.withdraw.create({
-          data: {
-            userId: id,
-            amount,
-            status: 'Pending',
-          },
-        });
+        const balance = await getUserBalance(user?.email as string);
+      if (balance < amount) throw new Error("Not enough balance");
+      console.log("balance", balance)
+
+      const withdraw = await prisma.transaction.create({
+        data: {
+          userId: id,
+          txnId: "",
+          value: amount,
+          type: "WITHDRAW",
+          status: "pending",
+          reference: "",
+          valueToken: 0,
+        },
+      });
     
         return res.status(201).json(withdraw);
       } catch (err) {
@@ -41,6 +51,7 @@ export default async function handler(
     
 
     if (req.method === 'PUT') {
+      const { role } = user as {role: string}
       const { withdrawId, status, eventLog } = req.body;
 
       if (!withdrawId || !status) {
@@ -63,32 +74,23 @@ export default async function handler(
       return res.status(200).json(updatedWithdraw);
     }
 
-    if (req.method === 'GET') {
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-      res.setHeader('Pragma', 'no-cache');
-      res.setHeader('Expires', '0');
-    
+    if (req.method === "GET") {
+      const { id, role } = user as {id: string, role: string}
       try {
-        const user = await prisma.user.findUnique({
-          where: { email: session?.email || undefined },
-        });
-    
-        if (!session) {
-          return res.status(401).json({ message: "Unauthorized" });
-        }
   
-        const { id, role } = user as { id: string; role: string };
-  
-        const { page = 1, limit = 10 } = req.query;
+        const { page = 1, limit = 10, type = "WITHDRAW" } = req.query;
         const pageNumber = parseInt(page as string, 10);
         const pageLimit = parseInt(limit as string, 10);
   
-        const whereClause = role === "admin" ? {} : { userId: id };
+        const whereClause = {
+        ...(role === "admin" ? {} : { userId: id }),
+        type: type as string,
+      };
   
-        const totalRecords = await prisma.withdraw.count({ where: whereClause });
+        const totalRecords = await prisma.transaction.count({ where: whereClause });
         const totalPages = Math.ceil(totalRecords / pageLimit);
   
-        const withdraws = await prisma.withdraw.findMany({
+        const transactions = await prisma.transaction.findMany({
           where: whereClause,
           include: {
             user: {
@@ -105,14 +107,13 @@ export default async function handler(
         });
   
         return res.status(200).json({
-          withdraws,
+          transactions,
           totalPages,
           currentPage: pageNumber,
         });
-
       } catch (error) {
-        console.error('Error fetching withdraw history:', error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
       }
     }
     
