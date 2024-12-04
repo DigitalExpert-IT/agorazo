@@ -5,15 +5,20 @@ import { getToken } from "next-auth/jwt";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
 
-  if (req.method === "GET") {
-    try {
-      const session = await getToken({ req })
+  const session = await getToken({ req });
 
       if (!session) {
         return res.status(401).json({ message: "Unauthorized" });
       }
+    
+      const user = await prisma.user.findUnique({
+        where: { email: session?.email || undefined }
+      });
 
-      const { role, userId } = session;
+  if (req.method === "GET") {
+    try {
+
+      const { role, id: userId } = user as {role: string; id: string};
 
       const transaction = await prisma.transaction.findUnique({
         where: { id: id as string },
@@ -34,6 +39,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 
-  res.setHeader("Allow", ["GET"]);
+  if (req.method === 'PUT') {
+    const { role } = user as {role: string};
+    console.log("role", role);
+    const { id, status } = req.body;
+
+    if (!id || !status) {
+      return res.status(400).json({ error: 'Invalid withdrawId or status' });
+    }
+
+    if (role !== 'admin') {
+      return res.status(403).json({ error: 'Unauthorized. Only admins can update withdrawal status.' });
+    }
+
+    const updatedWithdraw = await prisma.transaction.update({
+      where: { id: id },
+      data: {
+        status,
+      },
+    });
+
+    return res.status(200).json(updatedWithdraw);
+  }
+
+  res.setHeader("Allow", ["GET, PUT"]);
   return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
 }

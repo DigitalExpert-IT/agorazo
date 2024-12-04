@@ -11,7 +11,7 @@ export const getUserBalance = async (email: string) => {
       where: {
         userId: user.id,
         type: "DEPOSIT", 
-        status: "VERIFIED"
+        // status: "VERIFIED" //update to match with actual done status
       },
     });
 

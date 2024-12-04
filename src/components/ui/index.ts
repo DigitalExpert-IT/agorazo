@@ -4,3 +4,4 @@ export * from "./Table";
 export * from "./Avatar";
 export * from "./Spinner";
 export * from "./TableAdmin";
+export * from "./modal";

@@ -1,9 +1,13 @@
 export interface IUserTransaction {
+  value: string;
+  id?:string;
   txnId: string;
+  user?: string;
   transactionDate: string;
   amount: number;
   status: string;
   reference: string;
+  createdAt?: Date;
   action?: () => void;
 }
 

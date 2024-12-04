@@ -2,7 +2,7 @@ import { UserWithdraw } from "components";
 import { LayoutMain } from "components/layout";
 import WithdrawForm from "components/WithdrawForm";
 
-const Dashboard = () => {
+const WithdrawUser = () => {
 
   return (
     <LayoutMain>
@@ -12,4 +12,4 @@ const Dashboard = () => {
   );
 }
 
-export default Dashboard;
+export default WithdrawUser;

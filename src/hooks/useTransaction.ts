@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { UseRegister } from "./useAuth";
-import { getUserBalance } from "utils/balance";
-import { useSession } from "next-auth/react";
 
 export interface Transaction {
   id: string;
@@ -84,7 +82,7 @@ export const useTransactions = (): UseTransactionsResult => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/transaction/${id}`, {
+      const response = await fetch(`/api/token-crypt/transaction/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

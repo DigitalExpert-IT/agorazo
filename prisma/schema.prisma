@@ -29,7 +29,6 @@ model User {
   updatedAt DateTime @updatedAt
 
   passwordResets PasswordReset[] @relation("UserToPasswordReset")
-  Withdraw       Withdraw[]
 }
 
 model PendingUser {

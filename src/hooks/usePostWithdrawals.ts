@@ -36,7 +36,7 @@ export const usePostWithdrawal = (): UsePostWithdrawalResponse => {
         setSuccess(true);
       }
     } catch (err) {
-      setError('Failed to create withdrawal request');
+      setError(err + 'Failed to create withdrawal request');
     } finally {
       setLoading(false);
     }

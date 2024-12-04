@@ -40,7 +40,7 @@ export const usePutWithdrawal = (): UsePutWithdrawalResponse => {
         setSuccess(true);
       }
     } catch (err) {
-      setError('Failed to update withdrawal request');
+      setError(err + 'Failed to update withdrawal request');
     } finally {
       setLoading(false);
     }

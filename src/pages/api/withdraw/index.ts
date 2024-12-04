@@ -50,30 +50,6 @@ export default async function handler(
     }
     
 
-    if (req.method === 'PUT') {
-      const { role } = user as {role: string}
-      const { withdrawId, status, eventLog } = req.body;
-
-      if (!withdrawId || !status) {
-        return res.status(400).json({ error: 'Invalid withdrawId or status' });
-      }
-
-      if (role !== 'admin') {
-        return res.status(403).json({ error: 'Unauthorized. Only admins can update withdrawal status.' });
-      }
-
-      const updatedWithdraw = await prisma.withdraw.update({
-        where: { id: withdrawId },
-        data: {
-          status,
-          eventLog,
-          updatedAt: new Date(),
-        },
-      });
-
-      return res.status(200).json(updatedWithdraw);
-    }
-
     if (req.method === "GET") {
       const { id, role } = user as {id: string, role: string}
       try {
@@ -118,7 +94,7 @@ export default async function handler(
     }
     
 
-    res.setHeader('Allow', ['POST', 'PUT', 'GET']);
+    res.setHeader('Allow', ['POST', 'GET']);
     return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
   } catch (error) {
     console.error('Error handling withdrawal request:', error);
