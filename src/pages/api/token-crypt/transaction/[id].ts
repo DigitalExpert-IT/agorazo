@@ -41,7 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === 'PUT') {
     const { role } = user as {role: string};
-    console.log("role", role);
     const { id, status } = req.body;
 
     if (!id || !status) {

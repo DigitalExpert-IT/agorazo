@@ -1,33 +1,36 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { IUserTransaction } from "constant";
-import { useGetWithdrawals, useUpdateWithdrawal } from "hooks";
+import { useTransactions } from "context";
 
 type ModalProps = {
   onClose: () => void;
-  transaction: IUserTransaction;
+  transaction: IUserTransaction[];
 };
 
 export const Modal = ({ onClose, transaction }: ModalProps) => {
+  const { updateWithdrawal, refetch } = useTransactions();
   const { register, handleSubmit } = useForm<IUserTransaction>({
     defaultValues: {
-        id: transaction.id,
-        status: transaction.status,
-        value: transaction.value,
-        createdAt: transaction.createdAt
+      id: transaction[0]?.id,
+      status: transaction[0]?.status,
+      value: transaction[0]?.value,
+      createdAt: transaction[0]?.createdAt
     },
   });
-  const { refetch} = useGetWithdrawals()
-  const { updateWithdrawal } = useUpdateWithdrawal()
 
   const onSubmit = async (data: Partial<IUserTransaction>) => {
-        await updateWithdrawal(data.id as string, data.status as string);
-        await refetch();
-        onClose();
+    try {
+      await updateWithdrawal(data.id as string, data.status as string);
+      await refetch();
+      onClose();
+    } catch (error) {
+      console.error('Update failed', error);
+    }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
+    <div style={{zIndex: 9999999999}} className="fixed min-h-full inset-0 flex justify-center items-center bg-black bg-opacity-50">
       <div className="relative p-4 w-full max-w-2xl max-h-full">
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
@@ -69,10 +72,11 @@ export const Modal = ({ onClose, transaction }: ModalProps) => {
               <input
                 type="text"
                 id="id"
+                {...register("id")}
                 value={transaction.id}
                 readOnly
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 sm:text-sm"
-              />
+                className="form-input min-w-full w-56 px-3 h-8 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded-md outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 bg-white text-black shadow-md"
+                />
             </div>
 
             <div>
@@ -87,8 +91,8 @@ export const Modal = ({ onClose, transaction }: ModalProps) => {
                 id="value"
                 value={transaction.value}
                 readOnly
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 sm:text-sm"
-              />
+                className="form-input min-h-10 min-w-full px-3 h-8 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded-md outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 bg-white text-black shadow-md"
+                />
             </div>
 
             <div>
@@ -101,7 +105,7 @@ export const Modal = ({ onClose, transaction }: ModalProps) => {
               <select
                 id="status"
                 {...register("status")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white sm:text-sm"
+                className="mt-1 min-h-10 block min-w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white sm:text-sm"
               >
                 <option value="pending">Pending</option>
                 <option value="verified">Verified</option>
@@ -121,21 +125,21 @@ export const Modal = ({ onClose, transaction }: ModalProps) => {
                 id="createdAt"
                 value={new Date(transaction.createdAt).toLocaleDateString()}
                 readOnly
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 sm:text-sm"
+                className="form-input min-w-full px-3 h-8 bg-transparent dark:bg-slate-900 dark:text-slate-200 rounded-md outline-none border border-gray-100 dark:border-gray-800 focus:ring-0 bg-white text-black shadow-md"
               />
             </div>
 
-            <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <div className="flex justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
               <button
                 type="submit"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
+                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                >
                 Save
               </button>
               <button
                 onClick={onClose}
                 type="button"
-                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
               >
                 Cancel
               </button>

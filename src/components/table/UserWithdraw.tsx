@@ -3,15 +3,15 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { Table } from "components/ui";
 import Pagination from "components/Pagination";
 import { IUserTransaction } from "constant";
-import { useGetWithdrawals } from "hooks";
 import Link from "next/link";
 import { statuses } from "constant/status";
 import { Search } from "lucide-react";
+import { useTransactions } from "context";
 
 const columnHelper = createColumnHelper<IUserTransaction>();
 
 export const UserWithdraw = () => {
-  const { withdrawals } = useGetWithdrawals();
+  const { withdrawals} = useTransactions();
 
   const getStatusColor = (status: string): string => {
     const matchedStatus = statuses.find((item) => item.status === status);

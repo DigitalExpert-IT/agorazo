@@ -1,7 +1,8 @@
 export interface IUserTransaction {
   value: string;
-  id?:string;
+  id:string;
   txnId: string;
+  email:string;
   user?: string;
   transactionDate: string;
   amount: number;

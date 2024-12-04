@@ -28,7 +28,6 @@ export default async function handler(
     
         const balance = await getUserBalance(user?.email as string);
       if (balance < amount) throw new Error("Not enough balance");
-      console.log("balance", balance)
 
       const withdraw = await prisma.transaction.create({
         data: {
